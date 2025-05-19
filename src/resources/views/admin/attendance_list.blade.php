@@ -7,11 +7,11 @@
 @section('content')
 <div>
     <div>
-        <h2>{{$today}}の勤怠</h2>
+        <h2>{{$today->format('Y年n月j日')}}の勤怠</h2>
     </div>
     <div>
-        <a href="/">←前日</a>
-        <span>{{$date}}</span>
+        <a href="/admin/attendance_list/?">←前日</a>
+        <span>{{$today->format('Y/m/d')}}</span>
         <a href="/">翌日→</a>
     </div>
     <div>
@@ -26,8 +26,8 @@
             </tr>
             @foreach($works as $work)
                 <td>{{$work->user->name}}</td>
-                <td>{{$work->start_time}}</td>
-                <td>{{$work->end_time}}</td>
+                <td>{{substr($work->start_time,0,5)}}</td>
+                <td>{{substr($work->end_time,0,5)}}</td>
                 <td></td>
                 <td></td>
                 <td><a href="/attendance/{{$work->id}}">詳細</a></td>

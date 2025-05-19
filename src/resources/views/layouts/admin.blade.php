@@ -13,7 +13,7 @@
                 <a href="/stamp_correction_request/list">申請一覧</a>
             </div>
             <div>
-                <form action="/logout">
+                <form action="/logout" method="post">
                     @csrf
                     <button>ログアウト</button>
                 </form>

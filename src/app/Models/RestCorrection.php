@@ -5,17 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Correction extends Model
+class RestCorrection extends Model
 {
     use HasFactory;
-
     protected $fillable = [
-        'user_id','work_id','punchIn','punchOut','break_begins','break_ends','note','status'
+        'work_id',
+        'rest_id',
+        'rest_start','rest_end',
     ];
-    
-    public function user(){
-        return $this->belongsTo('App\Models\User');
-    }
 
     public function work(){
         return $this->belongsTo('App\Models\Work');

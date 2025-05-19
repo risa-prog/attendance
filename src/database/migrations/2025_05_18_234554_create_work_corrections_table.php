@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCorrectionsTable extends Migration
+class CreateWorkCorrectionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateCorrectionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('corrections', function (Blueprint $table) {
+        Schema::create('work_corrections', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('work_id')->constrained()->cascadeOnDelete();
-            $table->time('punchIn');
-            $table->time('punchOut');
-            $table->time('break_begins');
-            $table->time('break_ends');
+            $table->time('work_start');
+            $table->time('work_end');
             $table->string('note');
             $table->tinyInteger('status')->unsigned()->comment('1:承認待ち 2:承認済み');
             $table->timestamps();
@@ -34,6 +32,6 @@ class CreateCorrectionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('corrections');
+        Schema::dropIfExists('work_corrections');
     }
 }

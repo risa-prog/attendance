@@ -23,21 +23,21 @@
                 <th>詳細</th>
                 <th>admin</th>
             </tr>
-            @foreach($corrections as $correction)
+            @foreach($work_corrections as $work_correction)
             <tr>
-                @if($correction->status == '1')
+                @if($work_correction->status == '1')
                 <td>承認待ち</td>
-                @elseif($correction->status == '2')
+                @elseif($work_correction->status == '2')
                 <td>承認済み</td>
                 @endif
-                <td>{{$correction->user->name}}</td>
-                <td>{{$correction->work->date}}</td>
-                <td>{{$correction->note}}</td>
-                <td>{{$correction->created_at}}</td>
-                <td><a href="/attendance/{{$correction->work->id}}">詳細</a></td>
+                <td>{{$work_correction->user->name}}</td>
+                <td>{{\Carbon\Carbon::parse($work_correction->work->date)->format('Y/m/d')}}</td>
+                <td>{{$work_correction->note}}</td>
+                <td>{{\Carbon\Carbon::parse($work_correction->created_at)->format('Y/m/d')}}</td>
+                <td><a href="/attendance/{{$work_correction->work->id}}">詳細</a></td>
                 <!-- if文でadminのidがあったら　として処理を変える -->
                 <td>
-                    <a href="/stamp_correction_request/approve/{{$correction->id}}">修正申請承認ページへ</a>
+                    <a href="/stamp_correction_request/approve/{{$work_correction->id}}">修正申請承認ページへ</a>
                 </td>
                 
             </tr>

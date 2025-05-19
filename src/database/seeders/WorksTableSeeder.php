@@ -86,6 +86,15 @@ class WorksTableSeeder extends Seeder
         ];
         DB::table('works')->insert($pram);
 
+        $pram = [
+            'user_id' => '2',
+            'date' => '2025-05-18',
+            'start_time' => '9:00',
+            'end_time' => '18:00',
+            'status' => '3'
+        ];
+        DB::table('works')->insert($pram);
+
         
     }
 }

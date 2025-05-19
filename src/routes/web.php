@@ -25,7 +25,7 @@ Route::post('/login',[LoginController::class,'store']);
 
 Route::middleware('auth')->group(function(){
     Route::get('/attendance',[AttendanceController::class,'showAttendance']);
-    Route::get('/attendance/{id}',[AttendanceController::class,'showAttendanceDetail']);
+    Route::get('/attendance/{id}',[AttendanceController::class,'showAttendanceDetail'])->name('work_detail');
     Route::get('/stamp_correction_request/list',[AttendanceController::class,'showCorrectionList']);
 
     Route::get('/timestamp/punch_in',[TimestampController::class,'punchIn']);
@@ -33,7 +33,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/timestamp/break_begins',[TimestampController::class,'breakBegins']);
     Route::get('timestamp/break_ends',[TimestampController::class,'breakEnds']);
 
-    Route::get('/attendance_list/last_month',[AttendanceController::class,'showLastMonth']);
+    Route::get('/attendance_list/previous_month',[AttendanceController::class,'showPreviousMonth']);
     Route::get('/attendance_list/next_month',[AttendanceController::class,'showNextMonth']);
 
     // user 修正ボタン
@@ -51,9 +51,13 @@ Route::middleware('auth')->group(function(){
     Route::get('/admin/attendance/list',[AdminController::class,'showAttendance']);
     // スタッフ別勤怠一覧
     Route::get('/admin/attendance/staff/{id}',[AdminController::class,'showStaffAttendance']);
+    // 前月
+    Route::get('/attendance/staff/previous_month',[AdminController::class,'showPreviousMonth']);
+    // 翌月
+    Route::get('/attendance/staff/next_month',[AdminController::class,'showNextMonth']);
 
     // 申請詳細画面（申請承認画面）
-    Route::get('/stamp_correction_request/approve/{attendance_correct_request}',[AdminController::class,'showCorrectionRequestApproval']);
+    Route::get('/stamp_correction_request/approve/{attendance_correct_request}',[AdminController::class,'showCorrectionRequestApproval'])->name('request.approval');
     // 申請承認処理
     Route::post('/stamp_correction_request/approve',[AdminController::class,'approve']);
 });

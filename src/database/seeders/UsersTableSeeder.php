@@ -14,19 +14,19 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $pram=[
-            'name' => '山田太郎',
-            'email' =>'yamadat@gmail.com',
-            'password' => bcrypt('secret'),
-        ];
-        DB::table('users')->insert($pram);
+        // $pram=[
+        //      'name' => '山田太郎',
+        //      'email' =>'yamadat@gmail.com',
+        //      'password' => bcrypt('secret'),
+        //  ];
+        //  DB::table('users')->insert($pram);
 
-        $pram=[
-            'name' => '山田花子',
-            'email' =>'hanako@gmail.com',
-            'password' => bcrypt('secret'),
-        ];
-        DB::table('users')->insert($pram);
+        //  $pram=[
+        //      'name' => '山田花子',
+        //      'email' =>'hanako@gmail.com',
+        //      'password' => bcrypt('secret'),
+        //  ];
+        //  DB::table('users')->insert($pram);
 
     }
 }

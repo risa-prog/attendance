@@ -6,14 +6,13 @@ use Illuminate\Http\Request;
 use Auth;
 use Carbon\Carbon;
 use App\Models\Work;
-use App\Models\Correction;
+use App\Models\WorkCorrection;
+use App\Models\RestCorrection;
 
 class AttendanceController extends Controller
 {
     public function showAttendance(){
         $now = Carbon::now();
-        $today = $now->isoFormat('YYYY年MM月DD日(ddd)');
-        $time = Carbon::now()->format('H:i');
         $date = $now->format('Y-m-d');
 
         $user = Auth::user();
@@ -21,85 +20,106 @@ class AttendanceController extends Controller
             ['user_id','=',$user->id] ,
             ['date','=',$date]
         ])->first();
-        return view('attendance.timestamp',compact('today','time','work'));
+        
+        return view('attendance.timestamp',compact('now','work'));
     }
 
      public function showAttendanceDetail($id){
         if($id === 'list'){
             $user = Auth::user();
-        $month = Carbon::today()->format('Y/m');
-        $date = Carbon::now()->format('Y-m-d'); 
-        
-        $from = date('Y-m-01');
-        $to = date('Y-m-t'); 
-        $works = Work::where('user_id',$user->id)->whereBetween('date',[$from, $to])->get();
+            $date = Carbon::now();
 
-        return view('attendance.list',compact('works','month','date'));
+            $works = Work::where('user_id',$user->id)->whereMonth('date',$date->month)->get();
+
+            return view('attendance.list',compact('works','date'));
 
         }else{
             $work = Work::find($id);
+           
             return view('attendance/detail',compact('work'));
         }
      }
 
     public function showCorrectionList(){
         $user = Auth::user();
-        $corrections = Correction::where('user_id',$user->id)->get();
-        
-        return view('attendance.correction',compact('corrections'));
+        $work_corrections = WorkCorrection::where('user_id',$user->id)->get();
+        return view('attendance.correction',compact('work_corrections'));
     }
 
-    public function showLastMonth(Request $request){
-        
+    public function showPreviousMonth(Request $request){
+        $user = Auth::user();
         $request_date = $request->date;
-        $startOfPreviousMonth = Carbon::parse($request_date)->subMonth()->startOfMonth();
-        $endOfPreviousMonth = Carbon::parse($request_date)->subMonth()->endOfMonth();
+        $targetDate = Carbon::parse($request_date);
+        $startOfPreviousMonth = $targetDate->copy()->subMonth()->startOfMonth();
+        $endOfPreviousMonth = $targetDate->copy()->subMonth()->endOfMonth();
         
-        $works = Work::whereBetween('date',[$startOfPreviousMonth,$endOfPreviousMonth])->get();
-        
-        $month = $startOfPreviousMonth->format('Y/m');
+        $works = Work::whereBetween('date',[$startOfPreviousMonth,$endOfPreviousMonth])->where('user_id',$user->id)->get();
 
-        $date = $startOfPreviousMonth->format('Y-m-d');
+        $date = $startOfPreviousMonth;
 
-        return view('attendance.list',compact('works','month','date'));
+        return view('attendance.list',compact('works','date'));
     }
 
     public function showNextMonth(Request $request){
+        $user = Auth::user();
         $request_date = $request->date;
-        $date = Carbon::parse($request_date);
-        $startOfNextMonth = $date->copy()->addMonthNoOverflow()->startOfMonth();
-        // dd($startOfNextMonth);
-        $endOfNextMonth = $date->copy()->addMonthNoOverflow()->endOfMonth();
+        $targetDate = Carbon::parse($request_date);
+        $startOfNextMonth = $targetDate->copy()->addMonthNoOverflow()->startOfMonth();
+        $endOfNextMonth = $targetDate->copy()->addMonthNoOverflow()->endOfMonth();
 
-        $works = Work::whereBetween('date',[$startOfNextMonth,$endOfNextMonth])->get();
+        $works = Work::whereBetween('date',[$startOfNextMonth,$endOfNextMonth])->where('user_id',$user->id)->get();
 
-        $month = $startOfNextMonth->format('Y/m');
-
-        $date = $startOfNextMonth->format('Y-m-d');
+        $date = $startOfNextMonth;
         
-        return view('attendance.list',compact('works','month','date'));
+        return view('attendance.list',compact('works','date'));
     }
 
     // 修正申請処理
-    public function request(Request $request){
+    public function request(CorrectionRequest $request){
         $user_id = Auth::id();
-        $correction = $request -> all();
-        dd($correction);
-        unset($correction['_token']);
-        $correction = array_merge($correction,['user_id' => "$user_id"]);
-        dd($correction);
-        Correction::create($correction);
+        $work_correction = $request->only(['work_id','work_start','work_end','status','note']);
+        $work_correction = array_merge($work_correction,['user_id' => $user_id]);
+        WorkCorrection::create($work_correction);
+        
+        $rest_corrections = $request->only(['rest_start','rest_end','rest_id']);
+        
+        $rest_id = $rest_corrections['rest_id'];
+        $rest_start = $rest_corrections['rest_start'];
+        $rest_end = $rest_corrections['rest_end'];
+        
+        for($i = 0; $i < count($rest_id); $i++){
+            $rest = [
+                'rest_id' => $rest_id[$i],
+                'rest_start' => $rest_start[$i],
+                'rest_end' => $rest_end[$i],
+                'work_id' => $work_correction['work_id']
+            ];
+
+           if($rest['rest_start'] !== null && $rest['rest_end'] !== null){
+            RestCorrection::create($rest);
+           }
+        }
+
+        if($request->rest_start2 != null && $request->rest_end2 != null){
+            $rest = [
+                'rest_start' => $request->rest_start2,
+                'rest_end' => $request->rest_end2,
+                'work_id' => $work_correction['work_id'],
+            ];
+            RestCorrection::create($rest);
+        }
+
+        return redirect()->route('work_detail',['id' => $work_correction['work_id']]);
        
-        // return redirect('/attendance/.$request->work_id');
     }
 
     public function showWaitingForApproval(){
-        $corrections = Correction::where('status','1')->get();
-        return view('attendance.correction',compact('corrections'));
+        $work_corrections = WorkCorrection::where('status','1')->get();
+        return view('attendance.correction',compact('work_corrections'));
     }
 
     public function showApproved(){
-        $corrections = Correction::where('status','2')->get();
-        return view('attendance.correction',compact('corrections'));
+        $work_corrections = WorkCorrection::where('status','2')->get();
+        return view('attendance.correction',compact('work_corrections'));
     }
 }

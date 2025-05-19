@@ -20,11 +20,15 @@ class Work extends Model
         return $this->hasMany('App\Models\Rest');
     }
 
-    public function correction(){
-        return $this->hasOne('App\Models\Correction');
+    public function workCorrection(){
+        return $this->hasOne('App\Models\workCorrection');
     }
 
-    public function total_work(){
+    public function restCorrections(){
+        return $this->hasMany('App\Models\restCorrection');
+    }
+
+    public function totalWork(){
        $start_time = new Carbon($this->start_time);
         $end_time = new Carbon($this->end_time);
         $interval = $start_time->diff($end_time);

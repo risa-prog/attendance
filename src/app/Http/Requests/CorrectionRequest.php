@@ -13,7 +13,7 @@ class CorrectionRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,21 @@ class CorrectionRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'work_start' => 'required|date_format:H:i|before:work_end',
+            'work_end' => 'required|date_format:H:i|after:work_start',
+            'rest_start' => 'nullable|date_format:H:i|after_or_equal:work_start',
+            'rest_end' => 'nullable|date_format:H:i|before_or_equal:work_end',
+            'note' => 'required'
+        ];
+    }
+
+    public function messages(){
+        return [
+            'punchIn.before' => '出勤時間もしくは退勤時間が不適切な値です。',
+            'punchOut.after' => '出勤時間もしくは退勤時間が不適切な値です。',
+            'break_begins.after_or_equal' => '休憩時間が勤務時間外です。',
+            '' => '休憩時間が勤務時間外です。',
+            'break_ends.before_or_equal' => '備考を記入してください。',
         ];
     }
 }

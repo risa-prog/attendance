@@ -9,8 +9,8 @@
         <h2>勤怠一覧</h2>
     </div>
     <div>
-        <a href="/attendance_list/last_month/?date={{$date}}">←前月</a>
-        <span>{{$month}}</span>
+        <a href="/attendance_list/previous_month/?date={{$date}}">←前月</a>
+        <span>{{$date->format('Y/m')}}</span>
         <a href="/attendance_list/next_month/?date={{$date}}">翌月→</a>
     </div>
     <div>
@@ -25,7 +25,7 @@
             </tr>
             @foreach($works as $work)
             <tr>
-                <td>{{$work->date}}</td>
+                <td>{{ \Carbon\Carbon::parse($work->date)->translatedFormat('m/d(D)')}}</td>
                 <td>{{substr($work->start_time,0,5)}}</td>
                 <td>{{substr($work->end_time,0,5)}}</td>
                 <td>
@@ -33,7 +33,7 @@
                 {{$rest->total_rest()}} 
                 @endforeach
                 </td>
-                <td>{{$work->total_work()}}</td>
+                <td></td>
                 <td><a href="/attendance/{{$work->id}}">詳細</a></td>
             </tr>
             @endforeach

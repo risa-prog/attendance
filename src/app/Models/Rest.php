@@ -9,8 +9,7 @@ class Rest extends Model
 {
     use HasFactory;
 
-    protected $fillable=['user_id','work_id','start_time','end_time'];
-
+    protected $fillable=['work_id','rest_start','rest_end'];
 
     public function total_rest(){
 

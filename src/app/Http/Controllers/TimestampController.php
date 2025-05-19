@@ -59,9 +59,8 @@ class TimestampController extends Controller
         $rest_start = Carbon::now()->format('H:i');
 
         $rest = Rest::create([
-            'user_id' => $user->id,
             'work_id' => $work->id,
-            'start_time' => $rest_start,
+            'rest_start' => $rest_start,
         ]);
 
         Work::where([
@@ -82,14 +81,13 @@ class TimestampController extends Controller
          ])->first();
 
         $rest = Rest::where([
-            'user_id' => $user->id,
             'work_id' => $work->id,
-            'end_time' => null,
+            'rest_end' => null,
          ])->first();
 
         $rest_end = Carbon::now()->format('H:i');
 
-        $rest->end_time = $rest_end;
+        $rest->rest_end = $rest_end;
         $rest->save();
 
         Work::where([

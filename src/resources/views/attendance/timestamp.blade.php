@@ -15,8 +15,8 @@
     <p>退勤済</p>
     @endif
     <div>
-        <p>{{$today}}</p>
-        <p>{{$time}}</p>
+         <p>{{$now->translatedFormat('Y年n月j日(D)')}}</p>
+        <p>{{$now->format('H:i')}}</p>
     </div>
     <div>
         @if($work === null)
