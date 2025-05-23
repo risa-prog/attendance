@@ -11,7 +11,11 @@ class Rest extends Model
 
     protected $fillable=['work_id','rest_start','rest_end'];
 
-    public function total_rest(){
-
+    public function getTotalRestTime($id){
+        $work = Work::with('rests')->find($id);
+        $rests = $work->rests->get();
+        $totalRestTime = $rests->sum(function($rest){
+            return $rest->rest_end->diffInMinutes($rest->rest_start);
+        });
     }
 }

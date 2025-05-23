@@ -1,0 +1,87 @@
+body {
+    background-color: #F0EFF2;
+}
+
+.timestamp {
+    /* height:100vh; */
+    width: 80%;
+    margin:140px auto;
+    text-align: center;
+}
+
+.timestamp__status {
+    margin-bottom: 20px;
+}
+
+.timestamp__status-span {
+    background-color: #c8c8c8;
+    border-radius:20px;
+    font-size: 16px;
+    padding: 10px 20px;
+}
+
+.timestamp__now {
+
+}
+
+.timestamp__now-date {
+    font-size: 24px;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 20px;
+}
+
+.timestamp__now-time {
+    font-size: 40px;
+    font-weight: bolder;
+    padding: 0;
+    margin: 0;
+}
+
+.timestamp__condition {
+    margin-top: 40px;
+}
+
+.timestamp__condition-working {
+    background-color: #000000;
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 8px 32px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.timestamp__condition-flex {
+    display: flex;
+    justify-content: center;
+}
+
+.timestamp__condition-leaving {
+    background-color: #000000;
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 8px 32px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 60px;
+}
+
+.timestamp__condition-breaking {
+    background-color: #FFFFFF;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 8px 28px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.timestamp__condition-breaking-back {
+    background-color: #FFFFFF;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 8px 32px;
+    text-decoration: none;
+    border-radius: 5px;
+}

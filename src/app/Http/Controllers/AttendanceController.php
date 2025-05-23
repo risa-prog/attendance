@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Models\Work;
 use App\Models\WorkCorrection;
 use App\Models\RestCorrection;
+use App\Http\Requests\CorrectionRequest;
 
 class AttendanceController extends Controller
 {
@@ -114,12 +115,20 @@ class AttendanceController extends Controller
     }
 
     public function showWaitingForApproval(){
-        $work_corrections = WorkCorrection::where('status','1')->get();
+        $user = Auth::user();
+        $work_corrections = WorkCorrection::where([
+            'status' => '1',
+            'user_id' => $user->id
+        ])->get();
         return view('attendance.correction',compact('work_corrections'));
     }
 
     public function showApproved(){
-        $work_corrections = WorkCorrection::where('status','2')->get();
+        $user = Auth::user();
+        $work_corrections = WorkCorrection::where([
+            'status' => '2',
+            'user_id' => $user->id
+        ])->get();
         return view('attendance.correction',compact('work_corrections'));
     }
 }

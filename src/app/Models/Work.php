@@ -28,10 +28,12 @@ class Work extends Model
         return $this->hasMany('App\Models\restCorrection');
     }
 
-    public function totalWork(){
-       $start_time = new Carbon($this->start_time);
-        $end_time = new Carbon($this->end_time);
-        $interval = $start_time->diff($end_time);
-        return $interval->h;
+    // 
+    
+    public function getTotalWorkDurationAttribute(){
+        $start = Carbon::parse($this->start_time);
+        $end = Carbon::parse($this->end_time);
+        $total = $end->diffInMinutes($start);
+        return $total;
     }
 }

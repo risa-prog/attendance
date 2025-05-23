@@ -15,7 +15,6 @@ class CreateWorkCorrectionsTable extends Migration
     {
         Schema::create('work_corrections', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('work_id')->constrained()->cascadeOnDelete();
             $table->time('work_start');
             $table->time('work_end');

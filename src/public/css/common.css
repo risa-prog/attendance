@@ -1,0 +1,28 @@
+.header__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header__nav-list {
+    display: flex;
+    font-weight: bold;
+}
+
+.header__nav-item {
+    margin-right: 30px;
+}
+
+.header__nav-list-link {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+.header__nav-button {
+    color: #FFFFFF;
+    background-color: #000000;
+    border: none;
+    font-weight: bold;
+    font-size: 16px;
+}
+

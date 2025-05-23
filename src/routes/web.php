@@ -40,21 +40,25 @@ Route::middleware('auth')->group(function(){
     Route::post('/attendance',[AttendanceController::class,'request']);
 
     // user 承認待ちのリスト表示
-    Route::get('/waiting_for_approval',[AttendanceController::class,'showWaitingForApproval']);
+    Route::get('/stamp_correction_request/list/waiting_for_approval',[AttendanceController::class,'showWaitingForApproval']);
     // user 承認済みのリスト表示
-    Route::get('/approved',[AttendanceController::class,'showApproved']);
+    Route::get('/stamp_correction_request/list/approved',[AttendanceController::class,'showApproved']);
 
     // Admin
     // スタッフ一覧
     Route::get('/admin/staff/list',[AdminController::class,'showStaffList']);
     // 勤怠一覧
-    Route::get('/admin/attendance/list',[AdminController::class,'showAttendance']);
+    Route::get('/admin/attendance/list',[AdminController::class,'showAttendanceList']);
+    // 勤怠一覧　前月
+    Route::get('/admin/attendance/list/previous_day',[AdminController::class,'showPreviousDay']);
+    // 勤怠一覧　翌月
+    Route::get('/admin/attendance/list/next_day',[AdminController::class,'showNextDay']);
     // スタッフ別勤怠一覧
     Route::get('/admin/attendance/staff/{id}',[AdminController::class,'showStaffAttendance']);
     // 前月
-    Route::get('/attendance/staff/previous_month',[AdminController::class,'showPreviousMonth']);
+    Route::get('/admin/attendance/staff/previous_month',[AdminController::class,'showPreviousMonth']);
     // 翌月
-    Route::get('/attendance/staff/next_month',[AdminController::class,'showNextMonth']);
+    Route::get('/admin/attendance/staff/next_month',[AdminController::class,'showNextMonth']);
 
     // 申請詳細画面（申請承認画面）
     Route::get('/stamp_correction_request/approve/{attendance_correct_request}',[AdminController::class,'showCorrectionRequestApproval'])->name('request.approval');

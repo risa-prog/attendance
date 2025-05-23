@@ -13,11 +13,29 @@ use App\Models\RestCorrection;
 
 class AdminController extends Controller
 {
-    public function showAttendance(){
+    public function showAttendanceList(){
         $today = Carbon::now();
         $work_day = $today->format('Y-m-d');
         $works = Work::where('date',$work_day)->get();
        
+        return view('admin.attendance_list',compact('today','works'));
+    }
+
+    public function showPreviousDay(Request $request){
+        $targetDay = Carbon::parse($request->date);
+        $previousDay = $targetDay->copy()->subDay();
+        $works = Work::whereDate('date',$previousDay->toDateString())->get();
+        $today = $previousDay;
+        
+        return view('admin.attendance_list',compact('today','works'));
+    }
+
+    public function showNextDay(Request $request){
+        $targetDay = Carbon::parse($request->date);
+        $nextDay = $targetDay->copy()->addDay();
+        $works = Work::whereDate('date',$nextDay->toDateString())->get();
+        $today = $nextDay;
+
         return view('admin.attendance_list',compact('today','works'));
     }
 
