@@ -10,49 +10,49 @@ use App\Models\Rest;
 
 class TimestampController extends Controller
 {
-    public function punchIn(){
+    public function workStart(){
         $user = Auth::user();
-        $date = Carbon::today()->format('Y-m-d');
+        $date = Carbon::now()->format('Y-m-d');
         
-        $start_time = Carbon::now()->format('H:i');
+        $work_start = Carbon::now()->format('H:i');
         
         Work::create([
             'user_id' => $user->id,
             'date' => $date,
-            'start_time' => $start_time,
-            'status' => '1'
+            'work_start' => $work_start,
+            'status' => '1',
         ]);
 
         return redirect('/attendance');
     }
 
-    public function punchOut(){
+    public function workEnd(){
         $user = Auth::user();
-        $date = Carbon::today()->format('Y-m-d');
+        $date = Carbon::now()->format('Y-m-d');
         
-        $end_time = Carbon::now()->format('H:i');
+        $work_end = Carbon::now()->format('H:i');
 
         $work = Work::where([
              ['user_id','=',$user->id] ,
              ['date','=',$date]
          ])->first();
 
-       $work->end_time = $end_time;
+       $work->work_end = $work_end;
        $work->save();
 
        Work::where([
-             ['user_id','=',$user->id] ,
-             ['date','=',$date]
+            ['user_id','=',$user->id] ,
+            ['date','=',$date]
          ])->update(['status' => '3']);
 
        return redirect('/attendance');
     }
 
-    public function breakBegins(){
+    public function restStart(){
         $user = Auth::user();
-        $date = Carbon::today()->format('Y-m-d');
+        $date = Carbon::now()->format('Y-m-d');
         $work = Work::where([
-             ['user_id','=',$user->id] ,
+             ['user_id','=',$user->id],
              ['date','=',$date]
          ])->first();
 
@@ -72,7 +72,7 @@ class TimestampController extends Controller
 
     }
 
-    public function breakEnds(){
+    public function restEnd(){
         $user = Auth::user();
         $date = Carbon::today()->format('Y-m-d');
         $work = Work::where([

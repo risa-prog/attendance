@@ -17,8 +17,8 @@ class WorksTableSeeder extends Seeder
         $pram = [
             'user_id' => '1',
             'date' => '2025-05-04',
-            'start_time' => '9:00',
-            'end_time' => '18:00',
+            'work_start' => '9:00',
+            'work_end' => '18:00',
             'status' => '3'
         ];
         DB::table('works')->insert($pram);
@@ -26,8 +26,8 @@ class WorksTableSeeder extends Seeder
         $pram = [
             'user_id' => '1',
             'date' => '2025-05-05',
-            'start_time' => '9:00',
-            'end_time' => '17:00',
+            'work_start' => '9:00',
+            'work_end' => '17:00',
             'status' => '3'
         ];
         DB::table('works')->insert($pram);
@@ -35,8 +35,8 @@ class WorksTableSeeder extends Seeder
         $pram = [
             'user_id' => '1',
             'date' => '2025-05-08',
-            'start_time' => '9:00',
-            'end_time' => '18:00',
+            'work_start' => '9:00',
+            'work_end' => '18:00',
             'status' => '3'
         ];
         DB::table('works')->insert($pram);
@@ -44,8 +44,8 @@ class WorksTableSeeder extends Seeder
         $pram = [
             'user_id' => '1',
             'date' => '2025-04-04',
-            'start_time' => '9:00',
-            'end_time' => '17:00',
+            'work_start' => '9:00',
+            'work_end' => '17:00',
             'status' => '3'
         ];
         DB::table('works')->insert($pram);
@@ -53,8 +53,8 @@ class WorksTableSeeder extends Seeder
         $pram = [
             'user_id' => '1',
             'date' => '2025-04-09',
-            'start_time' => '9:00',
-            'end_time' => '18:00',
+            'work_start' => '9:00',
+            'work_end' => '18:00',
             'status' => '3'
         ];
         DB::table('works')->insert($pram);
@@ -62,8 +62,8 @@ class WorksTableSeeder extends Seeder
         $pram = [
             'user_id' => '1',
             'date' => '2025-03-04',
-            'start_time' => '9:00',
-            'end_time' => '17:00',
+            'work_start' => '9:00',
+            'work_end' => '17:00',
             'status' => '3'
         ];
         DB::table('works')->insert($pram);
@@ -71,8 +71,8 @@ class WorksTableSeeder extends Seeder
         $pram = [
             'user_id' => '1',
             'date' => '2025-03-08',
-            'start_time' => '9:00',
-            'end_time' => '18:00',
+            'work_start' => '9:00',
+            'work_end' => '18:00',
             'status' => '3'
         ];
         DB::table('works')->insert($pram);
@@ -80,8 +80,8 @@ class WorksTableSeeder extends Seeder
         $pram = [
             'user_id' => '1',
             'date' => '2025-02-04',
-            'start_time' => '9:00',
-            'end_time' => '18:00',
+            'work_start' => '9:00',
+            'work_end' => '18:00',
             'status' => '3'
         ];
         DB::table('works')->insert($pram);
@@ -89,8 +89,8 @@ class WorksTableSeeder extends Seeder
         $pram = [
             'user_id' => '2',
             'date' => '2025-05-18',
-            'start_time' => '9:00',
-            'end_time' => '18:00',
+            'work_start' => '9:00',
+            'work_end' => '18:00',
             'status' => '3'
         ];
         DB::table('works')->insert($pram);

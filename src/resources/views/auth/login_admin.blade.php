@@ -11,6 +11,7 @@
     </div>
     <div class="login-form__content">
         <form action="/admin/login" method="post" novalidate>
+            <!-- <input type="hidden" name="guard" value="admin"> -->
             @csrf
             <div class="login-form__group">
                 <label class="login-form__label" for="">メールアドレス</label>

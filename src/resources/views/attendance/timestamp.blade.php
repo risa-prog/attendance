@@ -19,21 +19,52 @@
     </div>
     <div class="timestamp__now">
          <p class="timestamp__now-date">{{$now->translatedFormat('Y年n月j日(D)')}}</p>
-        <p class="timestamp__now-time">{{$now->format('H:i')}}</p>
+        <p class="timestamp__now-time" id="clock"></p>
     </div>
     <div class="timestamp__condition">
         @if($work === null)
-        <a href="/timestamp/punch_in" class="timestamp__condition-working">出勤</a>
+            <form action="/timestamp/work_start" method="post">
+                @csrf
+                <button class="timestamp__condition-working">出勤</button>
+            </form>
         @elseif($work->status == '1')
-        <div class="timestamp__condition-flex">
-            <a href="/timestamp/punch_out" class="timestamp__condition-leaving">退勤</a>
-            <a href="/timestamp/break_begins" class="timestamp__condition-breaking">休憩入</a>
-        </div>
+            <div class="timestamp__condition-flex">
+                <form action="/timestamp/work_end" method="post">
+                    @csrf
+                    <button class="timestamp__condition-leaving">退勤</button>
+                </form>
+                <form action="/timestamp/rest_start" method="post">
+                    @csrf
+                    <button class="timestamp__condition-rest-start">休憩入</button>
+                </form>
+            </div>
         @elseif($work->status == '2')
-        <a href="/timestamp/break_ends" class="timestamp__condition-breaking-back">休憩戻</a>
+            <form action="/timestamp/rest_end" method="post">
+                @csrf
+                <button class="timestamp__condition-rest-end">休憩戻</button>
+            </form>
         @elseif($work->status == '3')
         <p class="timestamp__good-job">お疲れ様でした。</p>
         @endif
     </div>
 </div>
+<script>
+        function updateTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+
+            // 2桁表示（例：09:05）
+            hours = hours.toString().padStart(2, '0');
+            minutes = minutes.toString().padStart(2, '0');
+
+            document.getElementById('clock').innerText = `${hours}:${minutes}`;
+        }
+
+        // ページ読み込み時に実行し、1分ごとに更新
+        window.onload = function () {
+            updateTime();
+            setInterval(updateTime, 60000); // 1分ごとに更新
+        };
+</script>
 @endsection

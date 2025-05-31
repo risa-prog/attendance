@@ -26,8 +26,8 @@
                     <td class="approval__table-data">{{substr($work_correction->work_start,0,5)}}
                         <span class="approval__table-span">~</span>    
                     {{substr($work_correction->work_end,0,5)}}</td>
-                    <input type="hidden" name="start_time" value="{{$work_correction->work_start}}">
-                    <input type="hidden" name="end_time" value="{{$work_correction->work_end}}">
+                    <input type="hidden" name="work_start" value="{{$work_correction->work_start}}">
+                    <input type="hidden" name="work_end" value="{{$work_correction->work_end}}">
                 </tr>
                 @foreach($rest_corrections as $rest_correction)
                 <tr class="approval__table-row">

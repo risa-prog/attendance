@@ -8,8 +8,8 @@
 <div class="correction">
     <h2 class="correction__ttl">申請一覧</h2>
     <div class="correction__status">
-        <a class="correction__link" href="/stamp_correction_request/list/waiting_for_approval">承認待ち</a>
-        <a class="correction__link" href="/stamp_correction_request/list/approved">承認済み</a>
+        <a class="correction__link" href="/stamp_correction_request/list?tab=waiting_for_approval">承認待ち</a>
+        <a class="correction__link" href="/stamp_correction_request/list?tab=approved">承認済み</a>
     </div>
     <div class="correction__content">
         <table class="correction__table">
@@ -29,7 +29,7 @@
                 @elseif($work_correction->status == '2')
                 <td class="correction__table-data">承認済み</td>
                 @endif
-                <td class="correction__table-data">{{$work_correction->user->name}}</td>
+                <td class="correction__table-data">{{$work_correction->work->user->name}}</td>
                 <td class="correction__table-data">{{\Carbon\Carbon::parse($work_correction->work->date)->format('Y/m/d')}}</td>
                 <td class="correction__table-data">{{$work_correction->note}}</td>
                 <td class="correction__table-data">{{\Carbon\Carbon::parse($work_correction->created_at)->format('Y/m/d')}}</td>

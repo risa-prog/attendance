@@ -34,11 +34,23 @@ class CorrectionRequest extends FormRequest
 
     public function messages(){
         return [
+            'work_start.required' => '出勤・退勤時間を入力してください。',
             'punchIn.before' => '出勤時間もしくは退勤時間が不適切な値です。',
             'punchOut.after' => '出勤時間もしくは退勤時間が不適切な値です。',
             'break_begins.after_or_equal' => '休憩時間が勤務時間外です。',
             '' => '休憩時間が勤務時間外です。',
             'break_ends.before_or_equal' => '備考を記入してください。',
+            'note.required' => '備考を入力してください。'
         ];
+    }
+
+    public function withValidator ($validator) {
+        $validator -> after(function ($validator) {
+            $start = $this->input('work_start');
+            $end = $this->input('work_end');
+            if (is_null($start) && !is_null($end) || !is_null($work_start) && is_null($work_end)) {
+                $validator->errors()->add('work_start','開始時間と終了時間は両方入力するか、両方空にしてください');
+            }
+        });
     }
 }

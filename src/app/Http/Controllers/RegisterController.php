@@ -13,6 +13,10 @@ use Laravel\Fortify\Contracts\RegisterResponse;
 
 class RegisterController extends Controller
 {
+    public function showRegisterForm () {
+        return view('auth.register');
+    }
+
     protected $guard;
 
     public function __construct(StatefulGuard $guard)
@@ -20,7 +24,7 @@ class RegisterController extends Controller
         $this->guard = $guard;
     }
 
-        public function store(RegisterRequest $request,CreatesNewUsers $creator): RegisterResponse {
+        public function register(RegisterRequest $request,CreatesNewUsers $creator): RegisterResponse {
         if (config('fortify.lowercase_usernames')) {
             $request->merge([
                 Fortify::username() => Str::lower($request->{Fortify::username()}),

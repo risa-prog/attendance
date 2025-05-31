@@ -10,7 +10,7 @@ class Work extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id','date','start_time','end_time','status'];
+    protected $fillable = ['user_id','date','work_start','work_end','status'];
 
     public function user(){
         return $this->belongsTo('App\Models\User');
@@ -26,14 +26,5 @@ class Work extends Model
 
     public function restCorrections(){
         return $this->hasMany('App\Models\restCorrection');
-    }
-
-    // 
-    
-    public function getTotalWorkDurationAttribute(){
-        $start = Carbon::parse($this->start_time);
-        $end = Carbon::parse($this->end_time);
-        $total = $end->diffInMinutes($start);
-        return $total;
-    }
+    } 
 }

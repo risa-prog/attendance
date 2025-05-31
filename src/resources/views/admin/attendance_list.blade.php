@@ -6,11 +6,11 @@
 
 @section('content')
 <div class="attendance-list">
-     <h2 class="attendance-list__ttl">{{$today->format('Y年n月j日')}}の勤怠</h2>
+     <h2 class="attendance-list__ttl">{{$day->format('Y年n月j日')}}の勤怠</h2>
     <div class="attendance-list__date">
-        <a class="attendance-list__previous-day" href="/admin/attendance/list/previous_day/?date={{$today}}">←前日</a>
-        <span class="attendance-list__span">{{$today->format('Y/m/d')}}</span>
-        <a class="attendance-list__next-day" href="/admin/attendance/list/next_day/?date={{$today}}">翌日→</a>
+        <a class="attendance-list__previous-day" href="/admin/attendance/list?tab=previous&date={{$day}}">←前日</a>
+        <span class="attendance-list__span">{{$day->format('Y/m/d')}}</span>
+        <a class="attendance-list__next-day" href="/admin/attendance/list?tab=next&date={{$day}}">翌日→</a>
     </div>
     <div class="attendance-list__content">
         <table class="attendance-list__table">
@@ -24,8 +24,8 @@
             </tr>
             @foreach($works as $work)
                 <td class="attendance-list__table-data">{{$work->user->name}}</td>
-                <td class="attendance-list__table-data">{{substr($work->start_time,0,5)}}</td>
-                <td class="attendance-list__table-data">{{substr($work->end_time,0,5)}}</td>
+                <td class="attendance-list__table-data">{{substr($work->work_start,0,5)}}</td>
+                <td class="attendance-list__table-data">{{substr($work->work_end,0,5)}}</td>
                 <td class="attendance-list__table-data"></td>
                 <td class="attendance-list__table-data"></td>
                 <td class="attendance-list__table-data"><a class="attendance-list__table-link" href="/attendance/{{$work->id}}">詳細</a></td>

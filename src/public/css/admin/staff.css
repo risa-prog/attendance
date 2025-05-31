@@ -32,39 +32,58 @@ body {
     font-weight: bold;
 }
 
-.staff__content {
+.staff__form {
     text-align: center;
+}
+
+.staff__form-content {
     background-color: #FFFFFF;
     padding: 8px;
     border-radius: 3px;
 }
 
-.staff__table {
+.staff__form-table {
     width: 100%;
 }
 
-.staff__table-row {
+.staff__form-table-row {
     border-bottom: 3px solid #F0EFF2;
 }
 
-.staff__table-row:last-child {
+.staff__form-table-row:last-child {
     border: none;
 }
 
-.staff__table-heading {
+.staff__form-table-heading {
     width: 15%; 
     padding: 8px;
 } 
 
-.staff__table-heading:first-child {
+.staff__form-table-heading:first-child {
     width: 15%; 
 }
 
-.staff__table-data {
+.staff__form-table-data {
     padding: 8px; 
 }
 
-.staff__table-link {
+.staff__form-table-link {
     text-decoration: none;
     color: black;
+}
+
+.staff__form-button {
+    margin-top: 30px;
+    text-align: right;
+}
+
+.staff__form-submit {
+    background-color: #000000;
+    color: #FFFFFF;
+    border-radius: 3px;
+    padding: 4px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    letter-spacing: 4px;
 }

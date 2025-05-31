@@ -8,8 +8,9 @@
 <div class="attendance-detail">
     <h2 class="attendance-detail__ttl">勤怠詳細</h2>
     <div class="attendance-detail__content">
-        <form class="attendance-detail__form" action="/attendance" method="post">
-        @csrf
+        <!-- <form class="attendance-detail__form" action="/attendance" method="post"> -->
+        <form action="/stamp_correction" method ="post">
+            @csrf
             <input type="hidden" name="work_id" value="{{$work->id}}">
             <input type="hidden" name="status" value="1">
             <table class="attendance-detail__table">
@@ -29,10 +30,16 @@
                     <th class="attendance-detail__table-heading">出勤・退勤</th>
                     @if($work->workCorrection === null || $work->workCorrection->status === 2)
                     <td class="attendance-detail__table-data">
-                        <input class="attendance-detail__form-input" type="text" name="work_start" value="{{substr($work->start_time,0,5)}}">
-                        <span class="attendance-detail__table-span">~</span>
-                        <input class="attendance-detail__form-input" type="text" name="work_end" value="{{substr($work->end_time,0,5)}}"></td>
-                    @else
+                    <input class="attendance-detail__form-input" type="text" name="work_start" value="{{substr($work->work_start,0,5)}}">
+                    <span class="attendance-detail__table-span">~</span>
+                    <input class="attendance-detail__form-input" type="text" name="work_end" value="{{substr($work->work_end,0,5)}}">
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+                @else
                     <td class="attendance-detail__table-data">{{substr($work->workCorrection->work_start,0,5)}}
                     <span class="attendance-detail__table-span">~</span>
                     {{substr($work->workCorrection->work_end,0,5)}}</td>
@@ -68,9 +75,12 @@
                 @if($work->workCorrection === null || $work->workCorrection->status === 2)
                 <tr class="attendance-detail__table-row">
                     <th class="attendance-detail__table-heading">休憩</th>
-                    <td class="attendance-detail__table-data"><input class="attendance-detail__form-input" type="text" name="rest_start2">
-                    <span class="attendance-detail__table-span">~</span>
-                    <input class="attendance-detail__form-input" type="text" name="rest_end2"></td>
+                    <td class="attendance-detail__table-data">
+                        <input class="attendance-detail__form-input" type="text" name="rest_start[]">
+                        <span class="attendance-detail__table-span">~</span>
+                        <input class="attendance-detail__form-input" type="text" name="rest_end[]">
+                        <input type="hidden" name="rest_id[]" value="">
+                    </td>
                 </tr>
                  @endif
                 <tr class="attendance-detail__table-row">
@@ -83,11 +93,12 @@
                 </tr>
             </table>
             <div class="attendance-detail__form-button">
-                @if(empty($work->workCorrection) || $work->workCorrection->status === 2)
+                <!-- @if(empty($work->workCorrection) || $work->workCorrection->status === 2)
                     <button class="attendance-detail__form-submit">修正</button>
-                @else
+                `@else
                     <p class="attendance-detail__form-message">*承認待ちのため修正はできません</p>
-                @endif
+                @endif  -->
+                <button>Admin 修正</button>
             </div>
         </form>
     </div>

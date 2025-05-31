@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Pipeline;
 use Laravel\Fortify\Contracts\LoginResponse;
 use Laravel\Fortify\Features;
@@ -16,32 +17,15 @@ use Laravel\Fortify\Actions\PrepareAuthenticatedSession;
 
 class LoginController extends Controller
 {
-    public function store(LoginRequest $request){
-       return $this->loginPipeline($request)->then(function ($request) {
-            return app(LoginResponse::class);
-        });
+    public function showLoginForm () {
+        return view('auth.login');
     }
 
-    protected function loginPipeline(LoginRequest $request)
-    {
-        if (Fortify::$authenticateThroughCallback) {
-            return (new Pipeline(app()))->send($request)->through(array_filter(
-                call_user_func(Fortify::$authenticateThroughCallback, $request)
-            ));
+    public function login(LoginRequest $request){
+       $credentials = $request->only('email', 'password');
+        if (Auth::guard('web')->attempt($credentials)) {
+            return redirect('/attendance');
         }
-
-        if (is_array(config('fortify.pipelines.login'))) {
-            return (new Pipeline(app()))->send($request)->through(array_filter(
-                config('fortify.pipelines.login')
-            ));
-        }
-
-        return (new Pipeline(app()))->send($request)->through(array_filter([
-            config('fortify.limiters.login') ? null : EnsureLoginIsNotThrottled::class,
-            config('fortify.lowercase_usernames') ? CanonicalizeUsername::class : null,
-            Features::enabled(Features::twoFactorAuthentication()) ? RedirectIfTwoFactorAuthenticatable::class : null,
-            AttemptToAuthenticate::class,
-            PrepareAuthenticatedSession::class,
-        ]));
+        return back()->withErrors(['email' => 'ログインに失敗しました']);
     }
 }
