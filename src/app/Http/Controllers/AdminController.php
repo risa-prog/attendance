@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class AdminController extends Controller
 {
     public function showAttendanceList(Request $request){
-        
         if ($request->tab === null) {
             $day = Carbon::now();
             $work_day = $day->format('Y-m-d');
@@ -76,6 +75,24 @@ class AdminController extends Controller
             $date = $startOfNextMonth;
 
             return view('admin.staff',compact('user','date','works'));
+        }
+    }
+
+    public function showAdminCorrectionList (Request $request) 
+    {
+        $user = User::all();
+        // dd($request->tab);
+
+        if ($request->tab === null) {
+            $work_corrections = WorkCorrection::with('user')->get();
+            // dd($work_corrections);
+            return view('attendance.correction', compact('work_corrections'));
+        } elseif ($request->tab === "waiting_for_approval") {
+            $work_corrections = WorkCorrection::where('status','1')->get();
+            return view('attendance.correction', compact('work_corrections'));
+        } else {
+            $work_corrections = WorkCorrection::where('status',2)->get();
+            return view('attendance.correction', compact('work_corrections'));
         }
     }
 
@@ -205,7 +222,7 @@ class AdminController extends Controller
             Rest::find($rest->id)->delete();
             }
         }
-        return redirect()->route('work_detail',['id' => $work->id]);  
+        return redirect()->route('admin.attendance.detail',['id' => $work->id]);  
     }
 
     public function downloadCsv (Request $request) {

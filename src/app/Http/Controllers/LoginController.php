@@ -26,6 +26,6 @@ class LoginController extends Controller
         if (Auth::guard('web')->attempt($credentials)) {
             return redirect('/attendance');
         }
-        return back()->withErrors(['email' => 'ログインに失敗しました']);
+        return back()->withErrors(['email' => 'ログイン情報が登録されていません']);
     }
 }

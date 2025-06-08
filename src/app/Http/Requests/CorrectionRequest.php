@@ -26,31 +26,51 @@ class CorrectionRequest extends FormRequest
         return [
             'work_start' => 'required|date_format:H:i|before:work_end',
             'work_end' => 'required|date_format:H:i|after:work_start',
-            'rest_start' => 'nullable|date_format:H:i|after_or_equal:work_start',
-            'rest_end' => 'nullable|date_format:H:i|before_or_equal:work_end',
+            'rest_start' => 'nullable|array',
+            'rest_start.*' => 'nullable|date_format:H:i|after_or_equal:work_start',
+            'rest_end' => 'nullable|array|',
+            'rest_end.*' => 'nullable|date_format:H:i|before_or_equal:work_end',
             'note' => 'required'
         ];
     }
 
     public function messages(){
         return [
-            'work_start.required' => '出勤・退勤時間を入力してください。',
-            'punchIn.before' => '出勤時間もしくは退勤時間が不適切な値です。',
-            'punchOut.after' => '出勤時間もしくは退勤時間が不適切な値です。',
-            'break_begins.after_or_equal' => '休憩時間が勤務時間外です。',
-            '' => '休憩時間が勤務時間外です。',
-            'break_ends.before_or_equal' => '備考を記入してください。',
-            'note.required' => '備考を入力してください。'
+            'work_start.required' => '出勤時間を入力してください。',
+            'work_start.date_format' => '開始時間は「時:分（例:09:00）」の形式で入力してください。',
+            'work_start.before' => '出勤時間もしくは退勤時間が不適切な値です。',
+            'work_end.required' => '退勤時間を入力してください',
+            'work_end.date_format' => '終了時間は「時:分（例:18:00）」の形式で入力してください。',
+            'work_end.after' => '出勤時間もしくは退勤時間が不適切な値です。',
+            'rest_start.*.date_format' => '開始時間は「時:分（例:12:00）」の形式で入力してください。',
+            'rest_start.*.after_or_equal' => '休憩時間が勤務時間外です。',
+            'rest_end.*.date_format' => '終了時間は「時:分（例:13:00）」の形式で入力してください。',
+            'rest_end.*.before_or_equal' => '休憩時間が勤務時間外です。',
+
+            'note.required' => '備考を記入してください。'
         ];
     }
 
-    public function withValidator ($validator) {
-        $validator -> after(function ($validator) {
-            $start = $this->input('work_start');
-            $end = $this->input('work_end');
-            if (is_null($start) && !is_null($end) || !is_null($work_start) && is_null($work_end)) {
-                $validator->errors()->add('work_start','開始時間と終了時間は両方入力するか、両方空にしてください');
-            }
-        });
-    }
+    public function withValidator($validator){
+            $validator->after(
+            function ($validator) {
+                $starts = $this->rest_start ?? [];
+                $ends = $this->rest_end ?? [];
+
+                foreach ($starts as $i => $start) {
+                    $end = $ends[$i] ?? null;
+                
+                    // どちらか片方だけ入力された場合
+                    if ($start && !$end) {
+                        $validator->errors()->add("rest_end.$i", '終了時間を入力してください。');
+                    }
+
+                    if (!$start && $end) {
+                        $validator->errors()->add("rest_start.$i", '開始時間を入力してください。');
+                    }
+                }
+            });
+        }
 }
+
+    

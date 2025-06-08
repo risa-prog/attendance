@@ -16,9 +16,11 @@ class AdminLoginController extends Controller
     public function login (LoginRequest $request) {
         $credentials = $request->only('email', 'password');
         if (Auth::guard('admin')->attempt($credentials)) {
+            $request->session()->regenerate();
+    
             return redirect('/admin/attendance/list');
         }
 
-        return back()->withErrors(['email' => '管理者ログインに失敗しました']);
+        return back()->withErrors(['email' => 'ログイン情報が登録されていません']);
     }
 }

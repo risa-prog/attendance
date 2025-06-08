@@ -33,16 +33,17 @@
                 <td class="correction__table-data">{{\Carbon\Carbon::parse($work_correction->work->date)->format('Y/m/d')}}</td>
                 <td class="correction__table-data">{{$work_correction->note}}</td>
                 <td class="correction__table-data">{{\Carbon\Carbon::parse($work_correction->created_at)->format('Y/m/d')}}</td>
-                <td class="correction__table-data"><a class="correction__table-link" href="/attendance/{{$work_correction->work->id}}">詳細</a></td>
-                <!-- if文でadminのidがあったら　として処理を変える -->
-                <!-- <td class="correction__table-data">
-                    <a class="correction__table-link" href="/stamp_correction_request/approve/{{$work_correction->id}}">修正申請承認ページへ</a>
-                </td> -->
-                
+                <td class="correction__table-data">
+                    @if (Auth::guard('web')->check())
+                    <a class="correction__table-link" href="/attendance/{{$work_correction->work->id}}">詳細</a>
+                    @elseif (Auth::guard('admin')->check())
+                    <a class="correction__table-link" href="/stamp_correction_request/approve/{{$work_correction->id}}">詳細</a>
+                    @endif
+                </td>
             </tr>
             @endforeach
         </table>
-        
+
     </div>
 </div>
 @endsection

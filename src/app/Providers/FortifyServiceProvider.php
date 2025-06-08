@@ -36,32 +36,7 @@ class FortifyServiceProvider extends ServiceProvider
 
         Fortify::ignoreRoutes();
 
-        // Fortify::loginView(function (Request $request) {
-        // return $request->is('admin/*')
-        //      ? view('auth.login_admin')
-        //      : view('auth.login');
-        //  });
-
-        Fortify::authenticateUsing(function (Request $request) {
-            if ($request->is('/admin/login')) {
-                $admin = Admin::where('email', $request->email)->first();
-                if ($admin && Hash::check($request->password, $admin->password)) {
-                Auth::guard('admin')->login($admin); 
-                return $admin;
-                }
-            }
-        });
-
-
-        Fortify::authenticateUsing(function (Request $request) {
-            if ($request->is('/login')) {
-                $user = User::where('email', $request->email)->first();
-                if ($user && Hash::check($request->password, $user->password)) {
-                    Auth::guard('web')->login($user); 
-                    return $user;
-                }
-            }
-        });
+        
     }
 }      
 
@@ -81,10 +56,7 @@ class FortifyServiceProvider extends ServiceProvider
         // });
 
 
-        // Fortify::loginView(function () {
-        //       return view('auth.login');
-        //   });
-
+        
         // RateLimiter::for('login',function(Request $request) {
         //     $email = (string) $request->email;
 

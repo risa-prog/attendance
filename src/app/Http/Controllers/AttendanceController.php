@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Work;
+use App\Models\Rest;
 use App\Models\WorkCorrection;
 use App\Models\RestCorrection;
 use App\Http\Requests\CorrectionRequest;
@@ -26,7 +27,6 @@ class AttendanceController extends Controller
     }
 
     public function showAttendanceList (Request $request) {
-    
         $user = Auth::user();
         $date = Carbon::now();
 
@@ -57,14 +57,29 @@ class AttendanceController extends Controller
         }
     }
 
+    public function AttendanceDetailRedirect ($id) {
+        if (Auth::guard('admin')->check()) {
+            return redirect()->route('admin.attendance.detail', ['id' => $id]);
+        } elseif (Auth::check('web') && $id === 'list') {
+            return redirect()->route('attendance.list');
+        } elseif (Auth::check('web')) {
+            return redirect()->route('user.attendance.detail', ['id' => $id]);
+        }
+
+        return redirect()->route('login');
+    }
+
      public function showAttendanceDetail ($id) {
             $work = Work::find($id);
-           
-            return view('attendance/detail',compact('work'));
+
+            $rests = Rest::where('work_id', $id)->get();
+            
+            return view('attendance.detail',compact('work','rests'));
         }
 
     public function showCorrectionList (Request $request) {
         $user = Auth::user();
+        
         if ($request->tab === null) {
             $work_corrections = WorkCorrection::where('user_id',$user->id)->get();
             return view('attendance.correction',compact('work_corrections'));
@@ -83,9 +98,8 @@ class AttendanceController extends Controller
         }
     }
 
-
     // 修正申請処理
-    public function request (Request $request) {
+    public function request (CorrectionRequest $request) {
         $user_id = Auth::id();
         $work_correction = $request->only(['work_id','work_start','work_end','status','note']);
         $work_correction = array_merge($work_correction,['user_id' => $user_id]);
@@ -107,8 +121,7 @@ class AttendanceController extends Controller
             if ($rest['rest_start'] !== null && $rest['rest_end'] !== null) {
                     RestCorrection::create($rest);
             }
-                
         }
-            return redirect()->route('work_detail',['id' => $work_correction['work_id']]);   
+            return redirect()->route('user.attendance.detail',['id' => $work_correction['work_id']]);
     }
 }

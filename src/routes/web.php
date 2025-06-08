@@ -26,33 +26,28 @@ use App\Http\Controllers\AdminController;
 */
 
 
-Route::get('/login', function () {
-    return view('auth.login');
-})->middleware('guest')->name('login');
-Route::get('/admin/login', function () {
-    return view('admin.login');
-})->middleware('guest:admin')->name('admin.login');
-
 Route::get('/login',
 [LoginController::class,'showLoginForm'])->name('login');
 Route::post('/login',[LoginController::class,'login']);
 Route::get('/register',
 [RegisterController::class,'showRegisterForm']);
 Route::post('/register',[RegisterController::class,'register']);
-Route::post('/logout',[LogoutController::class,'logout'])->name('logout');
+Route::post('/logout',[LogoutController::class,'logout']);
 
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('login');
+Route::prefix('admin')->group(function () {
+    Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
     Route::post('/login', [AdminLoginController::class, 'login']);
-    Route::post('/logout', [AdminLoginController::class, 'logout'])->name('logout');
+    Route::post('/logout', [AdminLogoutController::class, 'logout']);
 });
 
-
-Route::middleware('auth:web')->group(function(){
+Route::middleware(['auth:web'])->group(function(){
     Route::get('/attendance',[AttendanceController::class,'showAttendance']);
-    Route::get('/attendance/list',[AttendanceController::class,'showAttendanceList']);
-    Route::get('/attendance/{id}',[AttendanceController::class,'showAttendanceDetail'])->name('work_detail');
-    Route::get('/stamp_correction_request/list',[AttendanceController::class,'showCorrectionList']);
+    Route::get('/attendance/list', [
+        AttendanceController::class,
+        'showAttendanceList'
+    ])->name('attendance.list');
+    Route::get('/user/attendance/{id}',[AttendanceController::class,'showAttendanceDetail'])->name('user.attendance.detail');
+    Route::get('/user/stamp_correction_request/list',[AttendanceController::class,'showCorrectionList'])->name('user.collection.list');
     Route::post('/attendance',[AttendanceController::class,'request']);
 
     Route::post('/timestamp/work_start',[TimestampController::class,'workStart']);
@@ -62,62 +57,22 @@ Route::middleware('auth:web')->group(function(){
 
 });
 
-Route::middleware('auth:admin')->group(function () {
-    Route::get('/admin/attendance/list',[AdminController::class,'showAttendanceList']);
-     Route::get('/admin/staff/list',[AdminController::class,'showStaffList']);
-     Route::get('/admin/attendance/staff/{id}',[AdminController::class,'showStaffAttendance']);
-    Route::get('/stamp_correction_request/approve/{attendance_correct_request}',[AdminController::class,'showCorrectionRequestApproval'])->name('request.approval');
-    Route::post('/stamp_correction_request/approve',[AdminController::class,'approve']);
+Route::middleware(['check.admin'])->group(function () {
+    Route::get('/admin/attendance/list', [AdminController::class, 'showAttendanceList']);
+    Route::get('/admin/attendance/{id}', [AttendanceController::class, 'showAttendanceDetail'])->name('admin.attendance.detail');
+    Route::get('/admin/staff/list', [AdminController::class, 'showStaffList']);
+    Route::get('/admin/attendance/staff/{id}', [AdminController::class, 'showStaffAttendance']);
+    Route::get('/admin/stamp_correction_request/list', [AdminController::class, 'showAdminCorrectionList'])->name('admin.collection.list');
+    Route::get('/stamp_correction_request/approve/{attendance_correct_request}', [AdminController::class, 'showCorrectionRequestApproval'])->name('request.approval');
+    Route::post('/stamp_correction_request/approve', [AdminController::class, 'approve']);
     // Admin 修正機能
-    Route::post('/stamp_correction',[AdminController::class,'correct']);
+    Route::post('/stamp_correction', [AdminController::class, 'correct']);
 
     // csv
-    Route::post('/admin/attendance/staff/csv-download',[AdminController::class,'downloadCsv']);
+    Route::post('/admin/attendance/staff/csv-download', [AdminController::class, 'downloadCsv']);
 });
 
-//  });
-
-
+Route::get('/attendance/{id}', [AttendanceController::class, 'AttendanceDetailRedirect']);
+Route::get('/stamp_correction_request/list', function () {
     
-    
-
-
-
-
-
-
-// Route::middleware(['guest:admin'])->group(function () {
-//     Route::get('/admin/login', [AdminLoginController::class, 'showLoginForm']);
-//     Route::post('/admin/login', [AdminLoginController::class, 'store']);
-// });
-
-
-
-// Route::prefix('admin')->group(function () {
-//     Route::get('/login', AdminLoginController::class,'showStaffList');
-//     // Route::post('/login', [AdminLoginController::class, 'store'])
-//     //     ->middleware(['guest:admin']);
-    
-//     //     Route::middleware(['auth:admin'])->group(function () {
-//     //     Route::get('/staff/list');
-//     // });
-// });
-
-
-
-
-// Route::post('/admin/logout', function (Request $request) {
-//     Auth::guard('admin')->logout();
-//     $request->session()->invalidate();
-//     $request->session()->regenerateToken();
-//     return redirect('/admin/login');
-// });
-
-
-
-
-
-
-
-
-
+})->middleware(['correction.list.redirector']);
