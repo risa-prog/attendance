@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class WorksTableSeeder extends Seeder
 {
@@ -95,6 +96,31 @@ class WorksTableSeeder extends Seeder
         ];
         DB::table('works')->insert($pram);
 
-        
+        $pram = [
+            'user_id' => '1',
+            'date' => '2025-02-04',
+            'work_start' => '9:00',
+            'work_end' => '18:00',
+            'status' => '3'
+        ];
+        DB::table('works')->insert($pram);
+
+        $pram = [
+            'user_id' => '2',
+            'date' => Carbon::now()->format('Y-m-d'),
+            'work_start' => '9:00',
+            'work_end' => '',
+            'status' => '1'
+        ];
+        DB::table('works')->insert($pram);
+
+        $pram = [
+            'user_id' => '3',
+            'date' => Carbon::now()->format('Y-m-d'),
+            'work_start' => '9:00',
+            'work_end' => '',
+            'status' => '2'
+        ];
+        DB::table('works')->insert($pram);
     }
 }

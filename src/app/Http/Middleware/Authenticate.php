@@ -19,15 +19,11 @@ class Authenticate extends Middleware
             return route('login');
         }
 
-            //     dd('u');
-            //     return route('admin.login');
-            // } 
-            // dd(! Auth::guard('web')->check());
 
-            // if ($request->is('admin') || $request->is('admin/*')) {
-            //     dd('u');
-            //     return route('admin.login');
-            // } 
+        // if ($request->is('admin') || $request->is('admin/*')) {
+        //         dd('u');
+        //         return route('admin.login');
+        //     } 
 
             // if (! $request->expectsJson()) {
             //     return route('login');

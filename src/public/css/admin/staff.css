@@ -22,13 +22,24 @@ body {
     border-radius: 3px;
 }
 
-.staff__previous-month,
-.staff__next-month {
+.staff__month-link {
     text-decoration: none;
     color: black;
 }
 
-.staff__span {
+.staff__target-month {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.img-calendar {
+    height: 1.5em;
+    vertical-align: middle;
+}
+
+.staff__date-span {
     font-weight: bold;
 }
 

@@ -8,9 +8,18 @@
 <div class="attendance-list">
     <h2 class="attendance-list__ttl">{{$day->format('Y年n月j日')}}の勤怠</h2>
     <div class="attendance-list__date">
-        <a class="attendance-list__previous-day" href="/admin/attendance/list?tab=previous&date={{$day}}">←前日</a>
-        <span class="attendance-list__span">{{$day->format('Y/m/d')}}</span>
-        <a class="attendance-list__next-day" href="/admin/attendance/list?tab=next&date={{$day}}">翌日→</a>
+        <div class="attendance-list__previous-day">
+            <a class="attendance-list__link" href="/admin/attendance/list?tab=previous&date={{$day}}">←前日</a>
+        </div>
+        <div class="attendance-list__target-day">
+            <div class="attendance-list__date-img">
+                <img class="img-calendar" src="{{asset('img/スケジュールカレンダーのアイコン素材.png')}}" alt="">
+            </div>
+            <span class="attendance-list__span">{{$day->format('Y/m/d')}}</span>
+        </div>
+        <div class="attendance-list__next-day">
+            <a class="attendance-list__link" href="/admin/attendance/list?tab=next&date={{$day}}">翌日→</a>
+        </div>
     </div>
     <div class="attendance-list__content">
         <table class="attendance-list__table">

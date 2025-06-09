@@ -73,7 +73,8 @@ return [
     |
     */
 
-    'home' => RouteServiceProvider::HOME,
+    'home' => '/email_verification',
+    // 'home' => RouteServiceProvider::HOME,
 
     /*
     |--------------------------------------------------------------------------

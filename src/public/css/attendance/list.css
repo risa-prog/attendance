@@ -22,6 +22,18 @@ body {
     border-radius: 3px;
 }
 
+.attendance-list__target-month {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    gap: 8px;
+}
+
+.img-calendar {
+    height: 1.5em;
+    vertical-align: middle;
+}
+
 .previous-month-link,.next-month-link {
     text-decoration: none;
     color:black;

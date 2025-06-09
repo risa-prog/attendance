@@ -22,9 +22,21 @@ body {
     border-radius: 3px;
 }
 
-.attendance-list__previous-day,.attendance-list__next-day {
+.attendance-list__link {
     text-decoration: none;
     color:black;
+}
+
+.attendance-list__target-day {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.img-calendar {
+    height: 1.5em;
+    vertical-align: middle;
 }
 
 .attendance-list__span {

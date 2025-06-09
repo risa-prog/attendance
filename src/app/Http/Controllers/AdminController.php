@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AdminController extends Controller
 {
-    public function showAttendanceList(Request $request){
+    public function showAttendanceList(Request $request) {
         if ($request->tab === null) {
             $day = Carbon::now();
             $work_day = $day->format('Y-m-d');
@@ -39,12 +39,12 @@ class AdminController extends Controller
         
     }
 
-    public function showStaffList(){
+    public function showStaffList() {
         $users = User::all();
         return view('admin.staff_list',compact('users'));
     }
 
-    public function showStaffAttendance($id,Request $request){
+    public function showStaffAttendance($id,Request $request) {
         $user = User::find($id);
         
         if ($request->tab === null) {
@@ -78,14 +78,13 @@ class AdminController extends Controller
         }
     }
 
-    public function showAdminCorrectionList (Request $request) 
+    public function showAdminCorrectionList(Request $request) 
     {
         $user = User::all();
-        // dd($request->tab);
 
         if ($request->tab === null) {
             $work_corrections = WorkCorrection::with('user')->get();
-            // dd($work_corrections);
+            
             return view('attendance.correction', compact('work_corrections'));
         } elseif ($request->tab === "waiting_for_approval") {
             $work_corrections = WorkCorrection::where('status','1')->get();
@@ -96,7 +95,7 @@ class AdminController extends Controller
         }
     }
 
-    public function showCorrectionRequestApproval($attendance_correct_request){
+    public function showCorrectionRequestApproval($attendance_correct_request) {
         $work_correction = WorkCorrection::find($attendance_correct_request);
         
         $rest_corrections = RestCorrection::with('work')->whereHas('work',function($query) use ($work_correction){
@@ -106,7 +105,7 @@ class AdminController extends Controller
         return view('admin.approval',compact('work_correction','rest_corrections'));
     }
 
-    public function approve(Request $request){
+    public function approve(Request $request) {
         $work = Work::find($request->work_id);
         $work_start = substr($work->work_start,0,5);
         $work_end = substr($work->work_end,0,5);
@@ -152,7 +151,7 @@ class AdminController extends Controller
             }
 
             $rest_correction_ids = array();
-            foreach($rest_id as $id){
+            foreach ($rest_id as $id){
                 array_push($rest_correction_ids,$id);
             }
             

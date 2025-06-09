@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+
 use App\http\Requests\RegisterRequest;
-use Laravel\Fortify\Contracts\CreatesNewUsers;
-use Laravel\Fortify\Fortify;
-use Illuminate\Support\Str;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Contracts\Auth\StatefulGuard;
-use Laravel\Fortify\Contracts\RegisterResponse;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
@@ -17,26 +15,19 @@ class RegisterController extends Controller
         return view('auth.register');
     }
 
-    protected $guard;
-
-    public function __construct(StatefulGuard $guard)
+    public function register(RegisterRequest $request)
     {
-        $this->guard = $guard;
+        $user = User::create([
+            'name' => $request->name,
+            'email' => strtolower($request->email),
+            'password' => Hash::make($request->password),
+        ]);
+
+        event(new Registered($user));
+
+        Auth::login($user);
+
+        return redirect()->route('email.verification');
     }
 
-        public function register(RegisterRequest $request,CreatesNewUsers $creator): RegisterResponse {
-        if (config('fortify.lowercase_usernames')) {
-            $request->merge([
-                Fortify::username() => Str::lower($request->{Fortify::username()}),
-            ]);
-        }
-
-        event(new Registered($user = $creator->create($request->all())));
-
-        $this->guard->login($user);
-
-        return app(RegisterResponse::class);
-    
-
-    }
 }
