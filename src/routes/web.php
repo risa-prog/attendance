@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminLogoutController;
 use App\Http\Controllers\TimestampController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CommonController;
 use App\Http\Controllers\EmailVerificationController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -34,19 +35,25 @@ Route::get('/register',
 Route::post('/register',[RegisterController::class,'register']);
 Route::post('/logout',[LogoutController::class,'logout']);
 
+// メールで認証をした時
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill(); // email_verified_at を更新
-    return redirect('/attendance'); // 認証後のリダイレクト先
+    return view('auth.email_verification_complete');
+    // return redirect('/email_verification/complete'); // 認証後のリダイレクト先
 })->middleware(['auth:web', 'signed'])->name('verification.verify');
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', '認証リンクを再送しました。');
 })->middleware(['auth:web', 'throttle:6,1'])->name('verification.send');
+// メール認証必須のルートにて、メール認証をしないでアクセスしようとした時のリダイレクト先
 Route::get('/email/verify', function () {
     return view('auth.email_verification'); 
 })->middleware('auth:web')->name('verification.notice');
 
+// メール認証誘導画面へ
 Route::get('/email_verification',[EmailVerificationController::class,'index'])->name('email.verification');
+// メール認証誘導画面の認証ボタンを押した時
+Route::get('/email_verification/check', [EmailVerificationController::class, 'emailVerificationCheck']);
 
 Route::prefix('admin')->group(function () {
     Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
@@ -54,15 +61,13 @@ Route::prefix('admin')->group(function () {
     Route::post('/logout', [AdminLogoutController::class, 'logout']);
 });
 
-Route::middleware(['auth:web','verified'])->group(function(){
+Route::middleware(['auth:web','verified'])->group(function() {
     Route::get('/attendance',[AttendanceController::class,'showAttendance']);
     Route::get('/attendance/list', [
         AttendanceController::class,
         'showAttendanceList'
     ])->name('attendance.list');
-    Route::get('/user/attendance/{id}',[AttendanceController::class,'showAttendanceDetail'])->name('user.attendance.detail');
-    Route::get('/user/stamp_correction_request/list',[AttendanceController::class,'showCorrectionList'])->name('user.collection.list');
-    Route::post('/attendance',[AttendanceController::class,'request']);
+    Route::post('/attendance/correct_request',[AttendanceController::class,'request']);
 
     Route::post('/timestamp/work_start',[TimestampController::class,'workStart']);
     Route::post('/timestamp/work_end',[TimestampController::class,'workEnd']);
@@ -73,10 +78,8 @@ Route::middleware(['auth:web','verified'])->group(function(){
 
 Route::middleware(['check.admin'])->group(function () {
     Route::get('/admin/attendance/list', [AdminController::class, 'showAttendanceList']);
-    Route::get('/admin/attendance/{id}', [AttendanceController::class, 'showAttendanceDetail'])->name('admin.attendance.detail');
     Route::get('/admin/staff/list', [AdminController::class, 'showStaffList']);
     Route::get('/admin/attendance/staff/{id}', [AdminController::class, 'showStaffAttendance']);
-    Route::get('/admin/stamp_correction_request/list', [AdminController::class, 'showAdminCorrectionList'])->name('admin.collection.list');
     Route::get('/stamp_correction_request/approve/{attendance_correct_request}', [AdminController::class, 'showCorrectionRequestApproval'])->name('request.approval');
     Route::post('/stamp_correction_request/approve', [AdminController::class, 'approve']);
     // Admin 修正機能
@@ -86,7 +89,8 @@ Route::middleware(['check.admin'])->group(function () {
     Route::post('/admin/attendance/staff/csv-download', [AdminController::class, 'downloadCsv']);
 });
 
-Route::get('/attendance/{id}', [AttendanceController::class, 'AttendanceDetailRedirect']);
-Route::get('/stamp_correction_request/list', function () {
+Route::middleware(['auth.check'])->group(function() {
+    Route::get('/attendance/{id}', [CommonController::class, 'showAttendanceDetail'])->name('attendance.detail');
+    Route::get('/stamp_correction_request/list',[CommonController::class,'showCorrectionList']);
+});
 
-})->middleware(['correction.list.redirector']);

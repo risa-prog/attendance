@@ -10,7 +10,7 @@
     @if($work === null)
         <span class="timestamp__status-span">勤務外</span>
     @elseif($work->status == '1')
-        <span class="timestamp__status-span">勤務中</span>
+        <span class="timestamp__status-span">出勤中</span>
     @elseif($work->status == '2')
         <span class="timestamp__status-span">休憩中</span>
     @elseif($work->status== '3')

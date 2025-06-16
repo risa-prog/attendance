@@ -8,13 +8,15 @@
 <div class="attendance-detail">
     <h2 class="attendance-detail__ttl">勤怠詳細</h2>
     <div class="attendance-detail__content">
-        @if (Auth::guard('web')->check())
-        <form class="attendance-detail__form" action="/attendance" method="post">
+        @php
+            if (Auth::guard('web')->check()) {
+            $actionUrl = url('/attendance/correct_request');
+            } elseif (Auth::guard('admin')->check()) {
+            $actionUrl = url('/stamp_correction');
+            }
+        @endphp
+        <form class="attendance-detail__form" action="{{ $actionUrl }}" method="post">
             @csrf
-            @elseif (Auth::guard('admin')->check())
-            <form action="/stamp_correction" method="post">
-                @csrf
-                @endif
                 <input type="hidden" name="work_id" value="{{$work->id}}">
                 <input type="hidden" name="status" value="1">
                 <table class="attendance-detail__table">

@@ -78,22 +78,22 @@ class AdminController extends Controller
         }
     }
 
-    public function showAdminCorrectionList(Request $request) 
-    {
-        $user = User::all();
+    // public function showAdminCorrectionList(Request $request) 
+    // {
+    //     $user = User::all();
 
-        if ($request->tab === null) {
-            $work_corrections = WorkCorrection::with('user')->get();
+    //     if ($request->tab === null) {
+    //         $work_corrections = WorkCorrection::with('user')->get();
             
-            return view('attendance.correction', compact('work_corrections'));
-        } elseif ($request->tab === "waiting_for_approval") {
-            $work_corrections = WorkCorrection::where('status','1')->get();
-            return view('attendance.correction', compact('work_corrections'));
-        } else {
-            $work_corrections = WorkCorrection::where('status',2)->get();
-            return view('attendance.correction', compact('work_corrections'));
-        }
-    }
+    //         return view('attendance.correction', compact('work_corrections'));
+    //     } elseif ($request->tab === "waiting_for_approval") {
+    //         $work_corrections = WorkCorrection::where('status','1')->get();
+    //         return view('attendance.correction', compact('work_corrections'));
+    //     } else {
+    //         $work_corrections = WorkCorrection::where('status',2)->get();
+    //         return view('attendance.correction', compact('work_corrections'));
+    //     }
+    // }
 
     public function showCorrectionRequestApproval($attendance_correct_request) {
         $work_correction = WorkCorrection::find($attendance_correct_request);
@@ -174,7 +174,6 @@ class AdminController extends Controller
     }
 
     public function correct (Request $request) {
-        // dd($request->all());
         $work = Work::find($request->work_id);
         $work_start = substr($work->work_start,0,5);
         $work_end = substr($work->work_end,0,5);
@@ -221,7 +220,7 @@ class AdminController extends Controller
             Rest::find($rest->id)->delete();
             }
         }
-        return redirect()->route('admin.attendance.detail',['id' => $work->id]);  
+        return redirect()->route('attendance.detail',['id' => $work->id]);  
     }
 
     public function downloadCsv (Request $request) {

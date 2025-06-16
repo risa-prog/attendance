@@ -17,7 +17,7 @@ class WorksTableSeeder extends Seeder
     {
         $pram = [
             'user_id' => '1',
-            'date' => '2025-05-04',
+            'date' => '2025-05-01',
             'work_start' => '9:00',
             'work_end' => '18:00',
             'status' => '3'
@@ -109,7 +109,7 @@ class WorksTableSeeder extends Seeder
             'user_id' => '2',
             'date' => Carbon::now()->format('Y-m-d'),
             'work_start' => '9:00',
-            'work_end' => '',
+            'work_end' => null,
             'status' => '1'
         ];
         DB::table('works')->insert($pram);
@@ -118,8 +118,26 @@ class WorksTableSeeder extends Seeder
             'user_id' => '3',
             'date' => Carbon::now()->format('Y-m-d'),
             'work_start' => '9:00',
-            'work_end' => '',
+            'work_end' => null,
             'status' => '2'
+        ];
+        DB::table('works')->insert($pram);
+
+        $pram = [
+            'user_id' => '4',
+            'date' => Carbon::now()->format('Y-m-d'),
+            'work_start' => '9:00',
+            'work_end' => '18:00',
+            'status' => '3'
+        ];
+        DB::table('works')->insert($pram);
+
+        $pram = [
+            'user_id' => '4',
+            'date' => '2025-06-10',
+            'work_start' => '9:00',
+            'work_end' => '18:00',
+            'status' => '3'
         ];
         DB::table('works')->insert($pram);
     }
