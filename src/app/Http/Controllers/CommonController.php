@@ -24,31 +24,31 @@ class CommonController extends Controller
 
             if ($request->tab === null) {
                 $work_corrections = WorkCorrection::where('user_id', $user->id)->get();
-                return view('attendance.correction', compact('work_corrections'));
+                return view('attendance.correction_list', compact('work_corrections'));
             } elseif ($request->tab === "waiting_for_approval") {
                 $work_corrections = WorkCorrection::where([
                     'status' => 1,
                     'user_id' => $user->id
                 ])->get();
-                return view('attendance.correction', compact('work_corrections'));
+                return view('attendance.correction_list', compact('work_corrections'));
             } else {
                 $work_corrections = WorkCorrection::where([
                     'status' => 2,
                     'user_id' => $user->id
                 ])->get();
-                return view('attendance.correction', compact('work_corrections'));
+                return view('attendance.correction_list', compact('work_corrections'));
             }
 
         } elseif (Auth::guard('admin')->check()) {
             if ($request->tab === null) {
                 $work_corrections = WorkCorrection::all();
-                return view('attendance.correction', compact('work_corrections'));
+                return view('attendance.correction_list', compact('work_corrections'));
             } elseif ($request->tab === "waiting_for_approval") {
                 $work_corrections = WorkCorrection::where('status',1)->get();
-                return view('attendance.correction', compact('work_corrections'));
+                return view('attendance.correction_list', compact('work_corrections'));
             } elseif($request->tab === "approved") {
                 $work_corrections = WorkCorrection::where('status',2)->get();
-                return view('attendance.correction', compact('work_corrections'));
+                return view('attendance.correction_list', compact('work_corrections'));
             }
         } 
     }

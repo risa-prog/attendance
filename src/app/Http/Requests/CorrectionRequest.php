@@ -36,9 +36,9 @@ class CorrectionRequest extends FormRequest
 
     public function messages(){
         return [
-            'work_start.required' => '出勤時間を入力してください。',
-            'work_start.date_format' => '開始時間は「時:分（例:09:00）」の形式で入力してください。',
-            'work_start.before' => '出勤時間もしくは退勤時間が不適切な値です。',
+            'work_start.required' => '出勤時間を入力してください',
+            'work_start.date_format' => '開始時間は「時:分（例:09:00）」の形式で入力してください',
+            'work_start.before' => '出勤時間もしくは退勤時間が不適切な値です',
             'work_end.required' => '退勤時間を入力してください',
             'work_end.date_format' => '終了時間は「時:分（例:18:00）」の形式で入力してください',
             'work_end.after' => '出勤時間もしくは退勤時間が不適切な値です',
@@ -47,7 +47,6 @@ class CorrectionRequest extends FormRequest
             'rest_start.*.before' => '休憩時間が勤務時間外です',
             'rest_end.*.date_format' => '終了時間は「時:分（例:13:00）」の形式で入力してください',
             'rest_end.*.before_or_equal' => '休憩時間が勤務時間外です',
-
             'note.required' => '備考を記入してください'
         ];
     }

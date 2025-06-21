@@ -22,5 +22,12 @@ class AdminsTableSeeder extends Seeder
               'password' => Hash::make('jiro8888'),
           ];
           DB::table('admins')->insert($pram);
+
+        $pram = [
+            'name' => '山田三郎',
+            'email' => 'yamadas@gmail.com',
+            'password' => Hash::make('saburo7777'),
+        ];
+        DB::table('admins')->insert($pram);
     }
 }

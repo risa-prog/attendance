@@ -47,6 +47,10 @@ body {
     font-weight: bold;
 }
 
+.approval__span-day {
+    margin-left: 50px;
+}
+
 .approval__form-button {
     text-align: right;
     margin-top: 50px;

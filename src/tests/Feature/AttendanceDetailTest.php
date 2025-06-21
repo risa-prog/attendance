@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Work;
@@ -18,9 +17,12 @@ class AttendanceDetailTest extends TestCase
      *
      * @return void
      */
-    public function test_show_name()
+
+    // 10 勤怠詳細情報取得機能(一般ユーザー)
+
+    // 10-1 名前がログインユーザーのものになっている
+    public function test_user_can_view_users_name()
     {
-        // 名前がログインユーザーのなっている
         $user = User::factory()->create();
         $work = Work::factory()->create([
             'user_id' => $user->id,
@@ -36,9 +38,9 @@ class AttendanceDetailTest extends TestCase
         $response->assertSee($user->name);
     }
 
-    public function test_show_date()
+    // 10-2 日付が選択したものになっている
+    public function test_user_can_view_selected_date()
     {
-        // 日付が選択したものになっている
         $user = User::factory()->create();
         $yesterday = now()->subDay()->toDateString();
         $work = Work::factory()->create([
@@ -59,7 +61,7 @@ class AttendanceDetailTest extends TestCase
     }
 
     // 正確な時間が表示されている
-    public function test_attendance_detail_shows_accurate_times() {
+    public function test_user_can_view_accurate_time() {
         $user = User::factory()->create();
         $yesterday = now()->subDay()->toDateString();
         $work = Work::factory()->create([
@@ -71,20 +73,20 @@ class AttendanceDetailTest extends TestCase
         ]);
         $rest = Rest::factory()->create([
             'work_id' => $work->id,
-            'rest_start' => '12:00',
-            'rest_end' => '13:00',
+            'rest_start' => '12:00:00',
+            'rest_end' => '13:00:00',
         ]);
 
 
         $response = $this->actingAs($user)->get("/attendance/{$work->id}");
         $response->assertStatus(200);
 
-        // 出勤・退勤時間
-        $response->assertSee($work->start_time);
-        $response->assertSee($work->end_time);
+        // 10-3 出勤・退勤時間
+        $response->assertSee(substr($work->work_start, 0, 5));
+        $response->assertSee(substr($work->work_end, 0, 5));
 
-        // 休憩時間
-        $response->assertSee($rest->start_time);
-        $response->assertSee($rest->end_time);
+        // 10-4 休憩時間
+        $response->assertSee(substr($rest->rest_start, 0, 5));
+        $response->assertSee(substr($rest->rest_end, 0, 5));
     }
 }

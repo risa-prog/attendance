@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Carbon;
 use App\Models\Admin;
@@ -19,9 +18,12 @@ class AdminAttendanceListTest extends TestCase
      *
      * @return void
      */
-    // その日になされた全ユーザーの勤怠情報が正確か確認
-    public function test_get_staff_attendance()
+
+    // 12 勤怠一覧情報取得機能(管理者)
+
+    public function test_admin_can_view_all_users_attendance_information_correctly()
     {
+        // 12-1 その日になされた全ユーザーの勤怠情報を正確に確認できる
         $admin = Admin::factory()->create();
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
@@ -36,20 +38,20 @@ class AdminAttendanceListTest extends TestCase
         $work2 = Work::factory()->create([
             'user_id' => $user2->id,
             'date' => now()->toDateString(),
-            'work_start' => '09:00:00',
-            'work_end' => '18:00:00',
+            'work_start' => '10:00:00',
+            'work_end' => '19:00:00',
             'status' => 3,
         ]);
 
         $rest1 = Rest::factory()->create([
             'work_id' => $work1->id,
-            'rest_start' => '12:00',
-            'rest_end' => '13:00',
+            'rest_start' => '12:00:00',
+            'rest_end' => '13:00:00',
         ]);
         $rest2 = Rest::factory()->create([
             'work_id' => $work2->id,
-            'rest_start' => '12:00',
-            'rest_end' => '13:00',
+            'rest_start' => '13:00:00',
+            'rest_end' => '14:00:00',
         ]);
 
         $response = $this->actingAs($admin,'admin')->get('admin/attendance/list');
@@ -62,23 +64,77 @@ class AdminAttendanceListTest extends TestCase
         $response->assertSee('08:00');
 
         $response->assertSee($user2->name);
-        $response->assertSee('09:00');
-        $response->assertSee('18:00');
+        $response->assertSee('10:00');
+        $response->assertSee('19:00');
         $response->assertSee('01:00');
         $response->assertSee('08:00');
 
-        // 現在の日付が表示されている
+        //12-2 現在の日付が表示されている
         $date = Carbon::now()->format('Y/m/d');
         $response->assertSee($date);
     }   
 
-    // 前日の勤怠情報
-    public function test_get_staff_previous_month_attendance() {
+    // 12-3 前日の勤怠情報
+    public function test_admin_can_view_users_previous_day_attendance() {
+        $admin = Admin::factory()->create();
+        $user = User::factory()->create();
+        $date = Carbon::now()->toDateString();
+        $yesterday = Carbon::now()->yesterday()->toDateString();
 
+        $work = Work::factory()->create([
+            'user_id' => $user->id,
+            'date' => $yesterday,
+            'work_start' => '09:00:00',
+            'work_end' => '18:00:00',
+            'status' => 3,
+        ]);
+
+        $rest = Rest::factory()->create([
+            'work_id' => $work->id,
+            'rest_start' => '12:00:00',
+            'rest_end' => '13:00:00',
+        ]);
+
+        $response = $this->actingAs($admin, 'admin')->get("/admin/attendance/list?tab=previous&date={$date}");
+        $response->assertStatus(200);
+
+        $response->assertSee($yesterday);
+        $response->assertSee($user->name);
+        $response->assertSee('09:00');
+        $response->assertSee('18:00');
+        $response->assertSee('01:00');
+        $response->assertSee('08:00');
     }
 
-    // 翌日の勤怠情報
-    // test_get_staff_next_month_attendance() {
-        
-    // }
+    // 12-4 翌日の勤怠情報
+    public function  test_admin_can_view_users_next_day_attendance() {
+            $admin = Admin::factory()->create();
+            $user = User::factory()->create();
+            $date = Carbon::now()->toDateString();
+            $tomorrow = Carbon::now()->tomorrow()->toDateString();
+
+            $work = Work::factory()->create([
+                'user_id' => $user->id,
+                'date' => $tomorrow,
+                'work_start' => '09:00:00',
+                'work_end' => '18:00:00',
+                'status' => 3,
+            ]);
+
+            $rest = Rest::factory()->create([
+                'work_id' => $work->id,
+                'rest_start' => '12:00:00',
+                'rest_end' => '13:00:00',
+            ]);
+
+            $response = $this->actingAs($admin, 'admin')->get("/admin/attendance/list?tab=next&date={$date}");
+            $response->assertStatus(200);
+
+            $response->assertSee($tomorrow);
+            $response->assertSee($user->name);
+            $response->assertSee('09:00');
+            $response->assertSee('18:00');
+            $response->assertSee('01:00');
+            $response->assertSee('08:00');
+        }
 }

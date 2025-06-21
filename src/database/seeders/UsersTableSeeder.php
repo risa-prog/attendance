@@ -33,19 +33,11 @@ class UsersTableSeeder extends Seeder
           DB::table('users')->insert($pram);
 
       $pram = [
-        'name' => '山田次郎',
-        'email' => 'jiro@gmail.com',
-        'password' => Hash::make('jiro2222'),
+        'name' => '山田小太郎',
+        'email' => 'kotaro@gmail.com',
+        'password' => Hash::make('kotaro222'),
         'email_verified_at' => Carbon::now(),
       ];
       DB::table('users')->insert($pram);
-
-    $pram = [
-      'name' => '山田三郎',
-      'email' => 'saburo@gmail.com',
-      'password' => Hash::make('saburo333'),
-      'email_verified_at' => Carbon::now(),
-    ];
-    DB::table('users')->insert($pram);
-  }
+    }
 }

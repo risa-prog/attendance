@@ -20,30 +20,28 @@
                 <th class="correction__table-heading">申請理由</th>
                 <th class="correction__table-heading">申請日時</th>
                 <th class="correction__table-heading">詳細</th>
-                <!-- <th class="correction__table-heading">admin</th> -->
             </tr>
             @foreach($work_corrections as $work_correction)
-            <tr class="correction__table-row">
-                @if($work_correction->status == '1')
-                <td class="correction__table-data">承認待ち</td>
-                @elseif($work_correction->status == '2')
-                <td class="correction__table-data">承認済み</td>
-                @endif
-                <td class="correction__table-data">{{$work_correction->work->user->name}}</td>
-                <td class="correction__table-data">{{\Carbon\Carbon::parse($work_correction->work->date)->format('Y/m/d')}}</td>
-                <td class="correction__table-data">{{$work_correction->note}}</td>
-                <td class="correction__table-data">{{\Carbon\Carbon::parse($work_correction->created_at)->format('Y/m/d')}}</td>
-                <td class="correction__table-data">
-                    @if (Auth::guard('web')->check())
-                    <a class="correction__table-link" href="/attendance/{{$work_correction->work->id}}">詳細</a>
-                    @elseif (Auth::guard('admin')->check())
-                    <a class="correction__table-link" href="/stamp_correction_request/approve/{{$work_correction->id}}">詳細</a>
+                <tr class="correction__table-row">
+                    @if($work_correction->status == '1')
+                        <td class="correction__table-data">承認待ち</td>
+                    @elseif($work_correction->status == '2')
+                        <td class="correction__table-data">承認済み</td>
                     @endif
-                </td>
-            </tr>
+                    <td class="correction__table-data">{{$work_correction->work->user->name}}</td>
+                    <td class="correction__table-data">{{\Carbon\Carbon::parse($work_correction->work->date)->format('Y/m/d')}}</td>
+                    <td class="correction__table-data">{{$work_correction->note}}</td>
+                    <td class="correction__table-data">{{\Carbon\Carbon::parse($work_correction->created_at)->format('Y/m/d')}}</td>
+                    <td class="correction__table-data">
+                    @if (Auth::guard('web')->check())
+                        <a class="correction__table-link" href="/attendance/{{$work_correction->work->id}}">詳細</a>
+                    @elseif (Auth::guard('admin')->check())
+                        <a class="correction__table-link" href="/stamp_correction_request/approve/{{$work_correction->id}}">詳細</a>
+                    @endif
+                    </td>
+                </tr>
             @endforeach
         </table>
-
     </div>
 </div>
 @endsection

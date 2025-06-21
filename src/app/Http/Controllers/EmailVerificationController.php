@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Symfony\Component\HttpFoundation\Request;
 
 
 class EmailVerificationController extends Controller
@@ -22,7 +24,18 @@ class EmailVerificationController extends Controller
         }
     }
 
-    public function complete() {
-        return view('email_verification_complete');
+    public function emailVerify(EmailVerificationRequest $request) {
+        $request->fulfill(); 
+        //  email_verified_atを更新
+        return view('auth.email_verification_complete');
+    }
+
+    public function resend(Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+        return back()->with('message', '認証リンクを再送しました。');
+    }
+
+    public function emailVerificationRedirect() {
+        return view('auth.email_verification');
     }
 }

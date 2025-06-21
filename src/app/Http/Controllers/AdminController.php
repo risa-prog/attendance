@@ -11,6 +11,8 @@ use App\Models\Rest;
 use App\Models\WorkCorrection;
 use App\Models\RestCorrection;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use App\Http\Requests\CorrectionRequest;
+
 
 class AdminController extends Controller
 {
@@ -78,23 +80,6 @@ class AdminController extends Controller
         }
     }
 
-    // public function showAdminCorrectionList(Request $request) 
-    // {
-    //     $user = User::all();
-
-    //     if ($request->tab === null) {
-    //         $work_corrections = WorkCorrection::with('user')->get();
-            
-    //         return view('attendance.correction', compact('work_corrections'));
-    //     } elseif ($request->tab === "waiting_for_approval") {
-    //         $work_corrections = WorkCorrection::where('status','1')->get();
-    //         return view('attendance.correction', compact('work_corrections'));
-    //     } else {
-    //         $work_corrections = WorkCorrection::where('status',2)->get();
-    //         return view('attendance.correction', compact('work_corrections'));
-    //     }
-    // }
-
     public function showCorrectionRequestApproval($attendance_correct_request) {
         $work_correction = WorkCorrection::find($attendance_correct_request);
         
@@ -116,7 +101,7 @@ class AdminController extends Controller
         }
 
         // 休憩において修正申請があった時
-        if($work->restCorrections->isNotEmpty()){
+        if($work->restCorrections->isNotEmpty()) {
             // postで送ってきた修正内容を取得
             // 修正内容が複数の場合はarrayになっている
             // rest_idはnullもあり
@@ -160,7 +145,7 @@ class AdminController extends Controller
                     Rest::find($rest->id)->delete();
                 }
             }
-        } else {
+        } elseif($work->rests->isNotEmpty()) {
             $rests = Rest::where('work_id',$work->id)->get();
                 foreach ($rests as $rest) {
                 $rest->delete();
@@ -173,7 +158,7 @@ class AdminController extends Controller
         return redirect()->route(('request.approval'),['attendance_correct_request' => $work_correction->id]);
     }
 
-    public function correct (Request $request) {
+    public function correct (CorrectionRequest $request) {
         $work = Work::find($request->work_id);
         $work_start = substr($work->work_start,0,5);
         $work_end = substr($work->work_end,0,5);
@@ -224,29 +209,20 @@ class AdminController extends Controller
     }
 
     public function downloadCsv (Request $request) {
-        // $user = User::find($request->id);
-        
-        // $targetDate = Carbon::parse($date);
-        // $startOfMonth = $targetDate->copy()->startOfMonth();
-        // $endOfMonth = $targetDate->copy()->endOfMonth();
-
-        // $works = Work::whereBetween('date',[$startOfMonth,$endOfMonth])->where('user_id',$user->id)->get();
-
-        
         $data = $request->all();
         $length = count($data['date']);
         
         $csvData = [];
          for ($i = 0; $i < $length; $i++) {
-                 $array = [
-                     'date' => Carbon::parse($data['date'][$i])->translatedFormat('m/d(D)'),
-                      'work_start' => $data['work_start'][$i],
-                      'work_end' => $data['work_end'][$i],
-                      'totalRestTime' => $data['totalRestTime'][$i],
-                      'totalWorkTime' => $data['totalWorkTime'][$i]
-                 ];
-                 array_push($csvData,$array);
-             }
+            $array = [
+                    'date' => Carbon::parse($data['date'][$i])->translatedFormat('m/d(D)'),
+                    'work_start' => $data['work_start'][$i],
+                    'work_end' => $data['work_end'][$i],
+                    'totalRestTime' => $data['totalRestTime'][$i],
+                    'totalWorkTime' => $data['totalWorkTime'][$i]
+                ];
+            array_push($csvData,$array);
+        }
         
         $csvHeader = [
             'date','work_start','work_end','totalRestTime','totalWorkTime'
@@ -263,8 +239,7 @@ class AdminController extends Controller
                 
                 fputcsv($createCsvFile, $csv);
             }
-
-            
+ 
             fclose($createCsvFile);
         }, 200, [
             'Content-Type' => 'text/csv',

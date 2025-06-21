@@ -19,7 +19,7 @@ class CreateWorksTable extends Migration
             $table->date('date');
             $table->time('work_start');
             $table->time('work_end')->nullable();
-            $table->tinyInteger('status')->unsigned()->comment('1:勤務中 2:休憩中 3:退勤');
+            $table->tinyInteger('status')->unsigned()->comment('1:出勤中 2:休憩中 3:退勤');
             $table->timestamps();
         });
     }

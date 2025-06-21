@@ -17,22 +17,27 @@
                 </tr>
                 <tr class="approval__table-row">
                     <th class="approval__table-heading">日付</th>
-                    <td class="approval__table-data">{{ \Carbon\Carbon::parse($work_correction->work->date)->format('Y年')}}
-                    {{ \Carbon\Carbon::parse($work_correction->work->date)->format('n月j日')}}
+                    <td class="approval__table-data">
+                        <span class="approval__span-year">{{ \Carbon\Carbon::parse($work_correction->work->date)->format('Y年')}}</span>
+                        <span class="approval__span-day">{{ \Carbon\Carbon::parse($work_correction->work->date)->format('n月j日')}}</span>
                     </td>
                 </tr>
                 <tr class="approval__table-row">
                     <th class="approval__table-heading">出勤・退勤</th>
                     <td class="approval__table-data">{{substr($work_correction->work_start,0,5)}}
-                        <span class="approval__table-span">~</span>    
-                    {{substr($work_correction->work_end,0,5)}}</td>
+                        <span class="approval__table-span">~</span>
+                        {{substr($work_correction->work_end,0,5)}}
+                    </td>
                     <input type="hidden" name="work_start" value="{{$work_correction->work_start}}">
                     <input type="hidden" name="work_end" value="{{$work_correction->work_end}}">
                 </tr>
                 @foreach($rest_corrections as $rest_correction)
                 <tr class="approval__table-row">
                     <th class="approval__table-heading">休憩</th>
-                    <td class="approval__table-data">{{substr($rest_correction->rest_start,0,5)}}~{{substr($rest_correction->rest_end,0,5)}}</td>
+                    <td class="approval__table-data">
+                        {{substr($rest_correction->rest_start,0,5)}}
+                        <span class="approval__table-span">~</span>{{substr($rest_correction->rest_end,0,5)}}
+                    </td>
                     <input type="hidden" name="rest_start[]" value="{{$rest_correction->rest_start}}">
                     <input type="hidden" name="rest_end[]" value="{{$rest_correction->rest_end}}">
                     <input type="hidden" name="rest_id[]" value="{{$rest_correction->rest_id}}">

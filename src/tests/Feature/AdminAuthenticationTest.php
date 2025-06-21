@@ -2,31 +2,28 @@
 
 namespace Tests\Feature;
 
-use Database\Seeders\DatabaseSeeder;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\Admin;
 
 class AdminAuthenticationTest extends TestCase
 {
-    use DatabaseMigrations;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->seed(DatabaseSeeder::class);
-    }
-
+    use RefreshDatabase;
     /**
      * A basic feature test example.
      *
      * @return void
      */
+
+    // 3 ログイン認証機能(管理者)
+
+    // 3-1 メールアドレス未入力の場合のバリデーション
     public function test_login_admin_validate_email()
     {
-        $response = $this->post('/login', [
+        $admin = Admin::factory()->create();
+        $response = $this->post('/admin/login', [
             'email' => '',
-            'password' => 'password',
+            'password' => $admin->password,
         ]);
 
         $response->assertStatus(302);
@@ -36,10 +33,12 @@ class AdminAuthenticationTest extends TestCase
         $this->assertEquals('メールアドレスを入力してください', $errors->first('email'));
     }
 
+    // 3-2 パスワードが未入力の場合のバリデーション
     public function test_login_admin_validate_password()
     {
-        $response = $this->post('/login', [
-            'email' => 'test@gmail.com',
+        $admin = Admin::factory()->create();
+        $response = $this->post('/admin/login', [
+            'email' => $admin->email,
             'password' => '',
         ]);
 
@@ -50,11 +49,13 @@ class AdminAuthenticationTest extends TestCase
         $this->assertEquals('パスワードを入力してください', $errors->first('password'));
     }
 
+    // 3-3 登録内容と一致しない場合のバリデーション
     public function test_login_admin_validate_user()
     {
-        $response = $this->post('/login', [
-            'email' => "test2@gmail.com",
-            'password' => "password2",
+        $admin = Admin::factory()->create();
+        $response = $this->post('/admin/login', [
+            'email' => $admin->email.'1',
+            'password' => $admin->password,
         ]);
 
         $response->assertStatus(302);
