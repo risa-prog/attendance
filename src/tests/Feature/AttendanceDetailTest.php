@@ -8,6 +8,7 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Work;
 use App\Models\Rest;
+use App\Http\Middleware\VerifyCsrfToken;
 
 class AttendanceDetailTest extends TestCase
 {
@@ -17,6 +18,15 @@ class AttendanceDetailTest extends TestCase
      *
      * @return void
      */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // CSRF チェックのみ無効にする
+        $this->withoutMiddleware([
+            VerifyCsrfToken::class,
+        ]);
+    }
 
     // 10 勤怠詳細情報取得機能(一般ユーザー)
 
@@ -26,7 +36,7 @@ class AttendanceDetailTest extends TestCase
         $user = User::factory()->create();
         $work = Work::factory()->create([
             'user_id' => $user->id,
-            'date' => now()->subDay()->toDateString(),
+            'date' => now()->yesterday()->toDateString(),
             'work_start' => '09:00:00',
             'work_end' => '18:00:00',
             'status' => 3,
@@ -42,7 +52,7 @@ class AttendanceDetailTest extends TestCase
     public function test_user_can_view_selected_date()
     {
         $user = User::factory()->create();
-        $yesterday = now()->subDay()->toDateString();
+        $yesterday = now()->yesterday()->toDateString();
         $work = Work::factory()->create([
             'user_id' => $user->id,
             'date' => $yesterday,
@@ -63,7 +73,7 @@ class AttendanceDetailTest extends TestCase
     // 正確な時間が表示されている
     public function test_user_can_view_accurate_time() {
         $user = User::factory()->create();
-        $yesterday = now()->subDay()->toDateString();
+        $yesterday = now()->yesterday()->toDateString();
         $work = Work::factory()->create([
             'user_id' => $user->id,
             'date' => $yesterday,
@@ -76,7 +86,6 @@ class AttendanceDetailTest extends TestCase
             'rest_start' => '12:00:00',
             'rest_end' => '13:00:00',
         ]);
-
 
         $response = $this->actingAs($user)->get("/attendance/{$work->id}");
         $response->assertStatus(200);

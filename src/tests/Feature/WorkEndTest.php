@@ -8,7 +8,7 @@ use Illuminate\Support\Carbon;
 use App\Models\User;
 use App\Models\Admin;
 use App\Models\Work;
-use PHPUnit\Framework\Constraint\IsFalse;
+use App\Http\Middleware\VerifyCsrfToken;
 
 class WorkEndTest extends TestCase
 {
@@ -18,6 +18,15 @@ class WorkEndTest extends TestCase
      *
      * @return void
      */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // CSRF チェックのみ無効にする
+        $this->withoutMiddleware([
+            VerifyCsrfToken::class,
+        ]);
+    }
 
     // 退勤機能
 
@@ -60,7 +69,7 @@ class WorkEndTest extends TestCase
         $response = $this->actingAs($admin,'admin')->get('/admin/attendance/list');
         $response->assertSeeInOrder([
             $date,
-            $work->work_end,
+            substr($work->work_end, 0, 5),
         ]);
     }
 }

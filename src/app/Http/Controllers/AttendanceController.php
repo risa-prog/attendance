@@ -31,10 +31,9 @@ class AttendanceController extends Controller
 
         if ($request->tab === null) {
             $targetDate = Carbon::now();
-            $monthStart = $targetDate->copy()->startOfMonth(); // 1日
-            $monthEnd = $targetDate->copy()->endOfMonth();   // 月末
+            $monthStart = $targetDate->copy()->startOfMonth(); 
+            $monthEnd = $targetDate->copy()->endOfMonth();  
             
-
             $dates = CarbonPeriod::create($monthStart, $monthEnd);
 
             $works = Work::where('user_id', $user->id)->whereBetween('date', [$monthStart, $monthEnd])

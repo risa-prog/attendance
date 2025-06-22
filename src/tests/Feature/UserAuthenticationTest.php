@@ -6,6 +6,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
+use App\Http\Middleware\VerifyCsrfToken;
 
 class UserAuthenticationTest extends TestCase
 {
@@ -16,6 +17,15 @@ class UserAuthenticationTest extends TestCase
      *
      * @return void
      */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // CSRF チェックのみ無効にする
+        $this->withoutMiddleware([
+            VerifyCsrfToken::class,
+        ]);
+    }
 
     // 1 認証機能(一般ユーザー)
 
@@ -113,7 +123,6 @@ class UserAuthenticationTest extends TestCase
             'password_confirmation' => 'password',
         ]);
 
-        // $response->assertStatus(302);
         $response->assertRedirect('/email_verification');
         $this->assertDatabaseHas(User::class, [
             'name' => "山田太郎",

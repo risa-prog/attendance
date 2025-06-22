@@ -5,7 +5,7 @@
     @if (Auth::guard('admin')->check())
     <ul class="header__nav-list">
         <li class="header__nav-item"><a class="header__nav-list-link" href="/admin/attendance/list">勤怠一覧</a></li>
-        <li class="header__nav-item"><a class="header__nav-list-link" href="/admin/attendance/staff/list">スタッフ一覧</a></li>
+        <li class="header__nav-item"><a class="header__nav-list-link" href="/admin/staff/list">スタッフ一覧</a></li>
         <li class="header__nav-item"><a class="header__nav-list-link" href="/stamp_correction_request/list">申請一覧</a></li>
         <li class="header__nav-item">
             <form action="/admin/logout" method="post">

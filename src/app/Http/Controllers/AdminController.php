@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use App\Models\User;
 use App\Models\Work;
 use App\Models\Rest;
@@ -38,7 +39,6 @@ class AdminController extends Controller
 
             return view('admin.attendance_list',compact('day','works'));
         }
-        
     }
 
     public function showStaffList() {
@@ -51,40 +51,61 @@ class AdminController extends Controller
         
         if ($request->tab === null) {
             $date = Carbon::now();
-            $works = Work::where('user_id',$user->id)->whereMonth('date',$date->month)->get();
+            $monthStart = $date->copy()->startOfMonth(); 
+            $monthEnd = $date->copy()->endOfMonth();
 
-            return view('admin.staff',compact('user','date','works'));
+            $dates = CarbonPeriod::create($monthStart, $monthEnd);
+
+            $works = Work::where('user_id',$user->id)
+                ->whereBetween('date', [$monthStart, $monthEnd])
+                ->get()
+                ->keyBy(fn($work) => Carbon::parse($work->date)->format('Y-m-d'));
+
+            return view('admin.staff',compact('user','date','works','dates'));
         } elseif ($request->tab === "previous") {
             $request_date = $request->date;
             $targetDate = Carbon::parse($request_date);
             $startOfPreviousMonth = $targetDate->copy()->subMonth()->startOfMonth();
             $endOfPreviousMonth = $targetDate->copy()->subMonth()->endOfMonth();
-        
-            $works = Work::whereBetween('date',[$startOfPreviousMonth,$endOfPreviousMonth])->where('user_id',$user->id)->get();
+            $dates = CarbonPeriod::create($startOfPreviousMonth, $endOfPreviousMonth);
+
+            $works = Work::whereBetween('date',[$startOfPreviousMonth,$endOfPreviousMonth])
+                ->where('user_id',$user->id)
+                ->get()
+                ->keyBy(fn($work) => Carbon::parse($work->date)
+                ->format('Y-m-d'));
 
             $date = $startOfPreviousMonth;
 
-            return view('admin.staff',compact('user','date','works'));
+            return view('admin.staff',compact('user','date','works','dates'));
         } else {
             $request_date = $request->date;
         
             $targetDate = Carbon::parse($request_date);
-            $startOfNextMonth = $targetDate->copy()->addMonthNoOverflow()->startOfMonth();
-            $endOfNextMonth = $targetDate->copy()->addMonthNoOverflow()->endOfMonth();
+            $startOfNextMonth = $targetDate->copy()->addMonthNoOverflow()
+                ->startOfMonth();
+            $endOfNextMonth = $targetDate->copy()->addMonthNoOverflow() 
+                ->endOfMonth();
+            $dates = CarbonPeriod::create($startOfNextMonth, $endOfNextMonth);
 
-            $works = Work::whereBetween('date',[$startOfNextMonth,$endOfNextMonth])->where('user_id',$user->id)->get();
+            $works = Work::whereBetween('date',[$startOfNextMonth,$endOfNextMonth])
+                ->where('user_id',$user->id)
+                ->get()
+                ->keyBy(fn($work) => Carbon::parse($work->date)->format('Y-m-d'));;
 
             $date = $startOfNextMonth;
 
-            return view('admin.staff',compact('user','date','works'));
+            return view('admin.staff',compact('user','date','works','dates'));
         }
     }
 
     public function showCorrectionRequestApproval($attendance_correct_request) {
         $work_correction = WorkCorrection::find($attendance_correct_request);
         
-        $rest_corrections = RestCorrection::with('work')->whereHas('work',function($query) use ($work_correction){
-            $query -> where('work_id',$work_correction->work_id);
+        $rest_corrections = RestCorrection::with('work')
+            ->whereHas('work',function($query) use ($work_correction){
+            $query 
+            -> where('work_id',$work_correction->work_id);
         })->get();
         
         return view('admin.approval',compact('work_correction','rest_corrections'));
@@ -102,14 +123,10 @@ class AdminController extends Controller
 
         // 休憩において修正申請があった時
         if($work->restCorrections->isNotEmpty()) {
-            // postで送ってきた修正内容を取得
-            // 修正内容が複数の場合はarrayになっている
-            // rest_idはnullもあり
             $rest_time = $request->only('rest_id','rest_start','rest_end');
             $rest_id = $rest_time['rest_id'];
             $rest_start = $rest_time['rest_start'];
             $rest_end = $rest_time['rest_end'];
-            // 修正内容は一つとは限らないのでforつかう
             // forで一つずつ修正データを取り出す
             // この時、rest_idはnullも含んでいる
             for($i = 0; $i < count($rest_start); $i++){
@@ -135,20 +152,20 @@ class AdminController extends Controller
                 } 
             }
 
-            $rest_correction_ids = array();
-            foreach ($rest_id as $id){
-                array_push($rest_correction_ids,$id);
+                $rest_correction_ids = array();
+                foreach ($rest_id as $id){
+                    array_push($rest_correction_ids,$id);
             }
             
-            foreach ($rests as $rest) {
-                if (!in_array($rest->id,$rest_correction_ids)) {
-                    Rest::find($rest->id)->delete();
-                }
-            }
-        } elseif($work->rests->isNotEmpty()) {
-            $rests = Rest::where('work_id',$work->id)->get();
                 foreach ($rests as $rest) {
-                $rest->delete();
+                    if (!in_array($rest->id,$rest_correction_ids)) {
+                        Rest::find($rest->id)->delete();
+                    }
+            }
+        } elseif ($work->rests->isNotEmpty()) {
+            $rests = Rest::where('work_id',$work->id)->get();
+            foreach ($rests as $rest) {
+                    $rest->delete();
             }
         }
         
@@ -195,6 +212,7 @@ class AdminController extends Controller
                 Rest::create($rest_correction);
             } 
         }
+
         $rest_correction_ids = array();
         foreach($rest_id as $id){
             array_push($rest_correction_ids,$id);

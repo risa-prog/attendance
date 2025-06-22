@@ -24,12 +24,12 @@ class CorrectionRequest extends FormRequest
     public function rules()
     {
         return [
-            'work_start' => 'required|date_format:H:i|before:work_end',
+            'work_start' => 'required|date_format:H:i|before:work_end|',
             'work_end' => 'required|date_format:H:i|after:work_start',
             'rest_start' => 'nullable|array',
-            'rest_start.*' => 'nullable|date_format:H:i|after_or_equal:work_start|before:work_end',
+            'rest_start.*' => 'nullable|date_format:H:i|after:work_start|before:work_end',
             'rest_end' => 'nullable|array|',
-            'rest_end.*' => 'nullable|date_format:H:i|before_or_equal:work_end',
+            'rest_end.*' => 'nullable|date_format:H:i|after:work_start|before:work_end',
             'note' => 'required'
         ];
     }
@@ -43,10 +43,11 @@ class CorrectionRequest extends FormRequest
             'work_end.date_format' => '終了時間は「時:分（例:18:00）」の形式で入力してください',
             'work_end.after' => '出勤時間もしくは退勤時間が不適切な値です',
             'rest_start.*.date_format' => '開始時間は「時:分（例:12:00）」の形式で入力してください',
-            'rest_start.*.after_or_equal' => '休憩時間が勤務時間外です',
+            'rest_start.*.after' => '休憩時間が勤務時間外です',
             'rest_start.*.before' => '休憩時間が勤務時間外です',
             'rest_end.*.date_format' => '終了時間は「時:分（例:13:00）」の形式で入力してください',
-            'rest_end.*.before_or_equal' => '休憩時間が勤務時間外です',
+            'rest_end.*.after' => '休憩時間が勤務時間外です',
+            'rest_end.*.before' => '休憩時間が勤務時間外です',
             'note.required' => '備考を記入してください'
         ];
     }

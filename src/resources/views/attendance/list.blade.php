@@ -56,12 +56,12 @@
                     }
                 @endphp
                 <tr class="attendance-table__row">
-                    <td class="attendance-table__data">{{$date->translatedFormat('m/d(D)') }}</td>
-                    <td class="attendance-table__data">{{substr(optional($work)->work_start,0,5)}}</td>
-                    <td class="attendance-table__data">{{substr(optional($work)->work_end,0,5)}}</td>
+                    <td class="attendance-table__data">{{ $date->translatedFormat('m/d(D)') }}</td>
+                    <td class="attendance-table__data">{{ substr(optional($work)->work_start,0,5) }}</td>
+                    <td class="attendance-table__data">{{ substr(optional($work)->work_end,0,5) }}</td>
                 @if($work !== null)
                     <td class="attendance-table__data">{{ sprintf('%02d:%02d', $restHours ?? 0, $restMinutes ?? 0) }}</td>
-                    <td class="attendance-table__data">{{sprintf('%02d:%02d',$workHours ?? 0,$workMinutes ?? 0)}}</td>
+                    <td class="attendance-table__data">{{ sprintf('%02d:%02d',$workHours ?? 0,$workMinutes ?? 0) }}</td>
                 @else
                     <td class="attendance-table__data"></td>
                     <td class="attendance-table__data"></td>

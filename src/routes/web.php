@@ -84,7 +84,7 @@ Route::middleware(['auth:web','verified'])->group(function() {
 
 Route::middleware(['check.admin'])->group(function () {
     Route::get('/admin/attendance/list', [AdminController::class, 'showAttendanceList']);
-    Route::get('/admin/attendance/staff/list', [AdminController::class, 'showStaffList']);
+    Route::get('/admin/staff/list', [AdminController::class, 'showStaffList']);
     Route::get('/admin/attendance/staff/{id}', [AdminController::class, 'showStaffAttendance']);
     Route::get('/stamp_correction_request/approve/{attendance_correct_request}', [AdminController::class, 'showCorrectionRequestApproval'])->name('request.approval');
     Route::post('/stamp_correction_request/approve', [AdminController::class, 'approve']);

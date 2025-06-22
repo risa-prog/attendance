@@ -8,6 +8,7 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Work;
 use App\Models\Rest;
+use App\Http\Middleware\VerifyCsrfToken;
 
 class RestTest extends TestCase
 {
@@ -17,6 +18,15 @@ class RestTest extends TestCase
      *
      * @return void
      */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // CSRF チェックのみ無効にする
+        $this->withoutMiddleware([
+            VerifyCsrfToken::class,
+        ]);
+    }
 
     // 7 休憩機能確認
 
@@ -128,8 +138,8 @@ class RestTest extends TestCase
         $response = $this->actingAs($user)->get('/attendance/list');
         $response->assertSeeInOrder([
             $date,
-            $rest->rest_start,
-            $rest->rest_end,
+            substr($rest->rest_start, 0, 5),
+            substr($rest->rest_end, 0, 5),
         ]);
     }
 }

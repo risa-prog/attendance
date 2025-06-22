@@ -18,7 +18,7 @@ class EmailVerificationController extends Controller
         if($user->email_verified_at === null) {
             return back()->with(
                 'message',
-                '送付したメールから認証を完了させてください');
+                '送付したメールから認証を完了させてください。');
         } else {
             return redirect('/attendance');
         }

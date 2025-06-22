@@ -8,7 +8,7 @@ use Illuminate\Support\Carbon;
 use App\Models\User;
 use App\Models\Work;
 use App\Models\Rest;
-
+use App\Http\Middleware\VerifyCsrfToken;
 
 class AttendanceListTest extends TestCase
 {
@@ -18,6 +18,15 @@ class AttendanceListTest extends TestCase
      *
      * @return void
      */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // CSRF チェックのみ無効にする
+        $this->withoutMiddleware([
+            VerifyCsrfToken::class,
+        ]);
+    }
     
     // 9 勤怠一覧情報取得機能(一般ユーザー)
 
@@ -28,9 +37,9 @@ class AttendanceListTest extends TestCase
 
         $work1 = Work::factory()->create([
             'user_id' => $user->id,
-            'date' => now()->startOfMonth()->toDateString(),
-            'work_start' => '09:00:00',
-            'work_end' => '18:00:00',
+            'date' => now()->startOfMonth()->addDay()->toDateString(),
+            'work_start' => '10:00:00',
+            'work_end' => '19:00:00',
             'status' => 3,
         ]);
         $work2 = Work::factory()->create([
@@ -58,8 +67,8 @@ class AttendanceListTest extends TestCase
         $response->assertSee(
             Carbon::parse($work1->date)->translatedFormat('m/d(D)')
         );
-        $response->assertSee('09:00');
-        $response->assertSee('18:00');
+        $response->assertSee('10:00');
+        $response->assertSee('19:00');
         $response->assertSee('01:00');
         $response->assertSee('08:00');
 
@@ -79,12 +88,12 @@ class AttendanceListTest extends TestCase
     // 9-3「前月」を押した時に前月の情報が表示される
     public function test_confirm_user_attendance_information_previous_month() {
         $user = User::factory()->create();
-        $this_month = Carbon::now()->toDateString();
+        $this_month = Carbon::now()
+            ->toDateString();
         $previous_month = Carbon::now()
-        ->copy()
-        ->subMonthNoOverflow()->startOfMonth()
-        ->addDay()
-        ->toDateString();
+            ->subMonthNoOverflow()->startOfMonth()
+            ->addDay()
+            ->toDateString();
         $work = Work::factory()->create([
             'user_id' => $user->id,
             'date' => $previous_month,
@@ -102,6 +111,7 @@ class AttendanceListTest extends TestCase
         $response = $this->actingAs($user)->get("/attendance/list?tab=previous&date={$this_month}");
         $response->assertStatus(200);
 
+        $response->assertSee(Carbon::parse($previous_month)->format('Y/m'));
         $response->assertSee('09:00');
         $response->assertSee('18:00');
         $response->assertSee('01:00');
@@ -112,9 +122,9 @@ class AttendanceListTest extends TestCase
     public function test_show_next_month_attendance()
     {
         $user = User::factory()->create();
-        $this_month = Carbon::now()->toDateString();
+        $this_month = Carbon::now()
+            ->toDateString();
         $next_month = Carbon::now()
-            ->copy()
             ->addMonthNoOverflow()->startOfMonth()
             ->addDay()->toDateString();
 
@@ -135,6 +145,7 @@ class AttendanceListTest extends TestCase
         $response = $this->actingAs($user)->get("/attendance/list?tab=next&date={$this_month}");
         $response->assertStatus(200);
 
+        $response->assertSee(Carbon::parse($next_month)->format('Y/m'));
         $response->assertSee('09:00');
         $response->assertSee('18:00');
         $response->assertSee('01:00');

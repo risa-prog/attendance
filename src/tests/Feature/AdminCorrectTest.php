@@ -11,6 +11,7 @@ use App\Models\Work;
 use App\Models\Rest;
 use App\Models\WorkCorrection;
 use App\Models\RestCorrection;
+use App\Http\Middleware\VerifyCsrfToken;
 
 
 class AdminCorrectTest extends TestCase
@@ -21,6 +22,15 @@ class AdminCorrectTest extends TestCase
      *
      * @return void
      */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // CSRF チェックのみ無効にする
+        $this->withoutMiddleware([
+            VerifyCsrfToken::class,
+        ]);
+    }
 
     // 15 勤怠情報修正機能(管理者)
 

@@ -19,6 +19,8 @@ class AuthCheck
     {
         if (Auth::guard('admin')->check() || Auth::guard('web')->check()) {
             return $next($request);
+        } else {
+            return redirect('/login');
         }
     }
 }

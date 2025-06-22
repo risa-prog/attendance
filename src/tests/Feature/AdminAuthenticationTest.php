@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\Admin;
+use App\Http\Middleware\VerifyCsrfToken;
 
 class AdminAuthenticationTest extends TestCase
 {
@@ -14,6 +15,16 @@ class AdminAuthenticationTest extends TestCase
      *
      * @return void
      */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // CSRF チェックのみ無効にする
+        $this->withoutMiddleware([
+            VerifyCsrfToken::class,
+        ]);
+    }
+
 
     // 3 ログイン認証機能(管理者)
 

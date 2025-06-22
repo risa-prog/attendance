@@ -4,11 +4,11 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Work;
 use App\Models\Admin;
+use App\Http\Middleware\VerifyCsrfToken;
 
 class WorkStartTest extends TestCase
 {
@@ -18,6 +18,15 @@ class WorkStartTest extends TestCase
      *
      * @return void
      */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // CSRF チェックのみ無効にする
+        $this->withoutMiddleware([
+            VerifyCsrfToken::class,
+        ]);
+    }
 
     //  6 出勤機能確認
 
@@ -63,7 +72,7 @@ class WorkStartTest extends TestCase
         $response = $this->actingAs($admin,'admin')->get('admin/attendance/list');
         $response->assertSeeInOrder([
             $date,
-            $work->work_start,
+            substr($work->work_start, 0, 5),
         ]);
     }
 }

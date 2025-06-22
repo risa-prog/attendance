@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Admin;
 use App\Models\Work;
 use App\Models\Rest;
+use App\Http\Middleware\VerifyCsrfToken;
 
 class AdminStaffTest extends TestCase
 {
@@ -19,6 +20,15 @@ class AdminStaffTest extends TestCase
      *
      * @return void
      */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // CSRF チェックのみ無効にする
+        $this->withoutMiddleware([
+            VerifyCsrfToken::class,
+        ]);
+    }
 
     // 14 ユーザー情報取得機能(管理者)
 
@@ -28,7 +38,7 @@ class AdminStaffTest extends TestCase
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
 
-        $response = $this->actingAs($admin,'admin')->get("/admin/staff/list");
+        $response = $this->actingAs($admin,'admin')->get('/admin/staff/list');
         $response->assertStatus(200);
 
         $response->assertSee($user1->name);
@@ -74,8 +84,13 @@ class AdminStaffTest extends TestCase
     public function test_show_previous_month_staff_attendance() {
         $admin = Admin::factory()->create();
         $user = User::factory()->create();
-        $subMonth = Carbon::now()->subMonthNoOverflow()->toDateString();
-        $date = Carbon::now()->toDateString();
+        $subMonth = Carbon::now()
+            ->subMonthNoOverflow()
+            ->startOfMonth()
+            ->addDay()
+            ->toDateString();
+        $date = Carbon::now()  
+            ->toDateString();
         
         $work = Work::factory()->create([
             'user_id' => $user->id,
@@ -105,8 +120,12 @@ class AdminStaffTest extends TestCase
     public function test_show_next_month_staff_attendance() {
         $admin = Admin::factory()->create();
         $user = User::factory()->create();
-        $nextMonth = Carbon::now()->addMonthNoOverflow()->toDateString();
-        $date = Carbon::now()->toDateString();
+        $nextMonth = Carbon::now()
+            ->addMonthNoOverflow()->startOfMonth()
+            ->addDay()
+            ->toDateString();
+        $date = Carbon::now() 
+            ->toDateString();
 
         $work = Work::factory()->create([
             'user_id' => $user->id,

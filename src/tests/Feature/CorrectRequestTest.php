@@ -11,6 +11,8 @@ use App\Models\Admin;
 use App\Models\WorkCorrection;
 use App\Models\RestCorrection;
 use Illuminate\Support\Carbon;
+use App\Http\Middleware\VerifyCsrfToken;
+
 
 class CorrectRequestTest extends TestCase
 {
@@ -20,6 +22,16 @@ class CorrectRequestTest extends TestCase
      *
      * @return void
      */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // CSRF チェックのみ無効にする
+        $this->withoutMiddleware([
+            VerifyCsrfToken::class,
+        ]);
+    }
+
     // 11 勤怠詳細情報修正機能(一般ユーザー)
 
     // 11-1 出勤時間が退勤時間より後になっている場合のバリデーション
@@ -46,8 +58,8 @@ class CorrectRequestTest extends TestCase
         $response = $this->post('/attendance/correct_request', [
             'work_start' => '17:00',
             'work_end' => '16:00',
-            'rest_start.0' => '12:00',
-            'rest_end.0' => '13:00',
+            'rest_start' => ['12:00'],
+            'rest_end' => ['13:00'],
             'note' => '打刻間違いのため',
         ]);
 
@@ -129,7 +141,7 @@ class CorrectRequestTest extends TestCase
         $this->assertEquals('休憩時間が勤務時間外です', $errors->first("rest_end.0"));
     }
 
-    // 11-4 備考欄が未入力の場合
+    // // 11-4 備考欄が未入力の場合
     public function test_correct_request_form_validate_note()
     {
         $user = User::factory()->create();
@@ -256,6 +268,7 @@ class CorrectRequestTest extends TestCase
             $created_at,
         ]);
     }
+
     // 11-7「承認済み」に管理者が承認した修正申請が全て表示されていること
     public function test_user_can_view_all_approved_attendance() {
         $user = User::factory()->create();
@@ -333,11 +346,11 @@ class CorrectRequestTest extends TestCase
 
         $response = $this->post('/attendance/correct_request', [
             'work_id' => $work->id,
-            'work_start' => '09:00',
-            'work_end' => '17:00',
+            'work_start' => '09:00:00',
+            'work_end' => '17:00:00',
             'rest_id' => $rest->id,
-            'rest_start' => ['12:00'],
-            'rest_end' => ['13:00'],
+            'rest_start' => ['12:00:00'],
+            'rest_end' => ['13:00:00'],
             'note' => '打刻間違いのため',
             'status' => 1,
         ]);
@@ -346,6 +359,10 @@ class CorrectRequestTest extends TestCase
 
         $response = $this->get('/stamp_correction_request/list');
         $response->assertStatus(200);
+
+        $response = $this->get("/attendance/{$work->id}");
+        $response->assertStatus(200);
+    
     }
 
 }

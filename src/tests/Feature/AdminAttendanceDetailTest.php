@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Admin;
 use App\Models\Work;
 use App\Models\Rest;
+use App\Http\Middleware\VerifyCsrfToken;
 
 class AdminAttendanceDetailTest extends TestCase
 {
@@ -18,6 +19,15 @@ class AdminAttendanceDetailTest extends TestCase
      *
      * @return void
      */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // CSRF チェックのみ無効にする
+        $this->withoutMiddleware([
+            VerifyCsrfToken::class,
+        ]);
+    }
 
     // 13　勤怠詳細情報取得・修正機能(管理者)
 

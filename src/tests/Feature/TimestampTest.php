@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Models\Work;
 use App\Models\Rest;
 use Illuminate\Support\Carbon;
-
+use App\Http\Middleware\VerifyCsrfToken;
 
 class TimestampTest extends TestCase
 {
@@ -19,6 +19,15 @@ class TimestampTest extends TestCase
      *
      * @return void
      */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // CSRF チェックのみ無効にする
+        $this->withoutMiddleware([
+            VerifyCsrfToken::class,
+        ]);
+    }
 
     // 4 日時取得機能
 
