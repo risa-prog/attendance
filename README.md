@@ -40,3 +40,37 @@ MailHogにアクセスしたい時は、http://localhost:8025 に繋げてくだ
 ## ER図
 
 ![](./attendance.drawio.png)
+
+## PHPUnitを利用したテストに関して
+
+1,テスト用の.envファイル作成</br>
+cp .env .env.testing<br>
+2,.env.testingファイルの文頭部分にあるAPP_ENVとAPP_KEYを編集</br>
+APP_ENV=testing</br>
+APP_KEY=</br>
+3,.env.testingにあるデータベースの接続情報を以下のように書き換える</br>
+(変更前)</br>
+DB_CONNECTION=mysql</br>
+DB_HOST=mysql</br>
+DB_PORT=3306</br>
+DB_DATABASE=laravel_db</br>
+DB_USERNAME=laravel_user</br>
+DB_PASSWORD=laravel_pass</br>
+(変更後)</br>
+DB_CONNECTION=sqlite</br>
+  DB_DATABASE=:memory:</br>
+4,以下のコマンドを実行する</br>
+php artisan key:generate --env=testing</br>
+php artisan config:clear</br>
+php artisan migrate --env=testing
+
+また、テスト実行時は `phpunit.xml` に以下の環境変数が設定されている必要があります：
+
+```xml
+<env name="APP_ENV" value="testing"/>
+<env name="DB_CONNECTION" value="sqlite"/>
+<env name="DB_DATABASE" value=":memory:"/>
+```
+
+5,以下のコマンドでテストを実行する</br>
+php artisan test   
