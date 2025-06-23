@@ -127,21 +127,22 @@ class AdminController extends Controller
             $rest_id = $rest_time['rest_id'];
             $rest_start = $rest_time['rest_start'];
             $rest_end = $rest_time['rest_end'];
-            // forで一つずつ修正データを取り出す
-            // この時、rest_idはnullも含んでいる
+
+            // forで一つずつrestの修正データを取り出す
+            // この時、rest_idがnullであるものも含んでいる
             for($i = 0; $i < count($rest_start); $i++){
                 $rest_correction = [
-                'id' => $rest_id[$i],
-                'rest_start' => $rest_start[$i],
-                'rest_end' => $rest_end[$i],
-                'work_id' => $work->id
+                    'id' => $rest_id[$i],
+                    'rest_start' => $rest_start[$i],
+                    'rest_end' => $rest_end[$i],
+                    'work_id' => $work->id,
                 ];
                 
-                // データベース内にあるrestのデータを取得し、restのidを配列に入れていく
+                // データベース内にあるrestのデータを取得し、idを配列に入れていく
                 $rests = Rest::where('work_id',$work->id)->get();
                 $rest_ids=array();
                 foreach($rests as $rest){
-                array_push($rest_ids,$rest->id);
+                    array_push($rest_ids,$rest->id);
                 }
         
                 // 修正しようとしているrestのデータがデータベース内にあるデータかどうかidを比較して判別する
@@ -152,15 +153,15 @@ class AdminController extends Controller
                 } 
             }
 
-                $rest_correction_ids = array();
-                foreach ($rest_id as $id){
-                    array_push($rest_correction_ids,$id);
+            $rest_correction_ids = array();
+            foreach ($rest_id as $id){
+                array_push($rest_correction_ids,$id);
             }
             
-                foreach ($rests as $rest) {
-                    if (!in_array($rest->id,$rest_correction_ids)) {
-                        Rest::find($rest->id)->delete();
-                    }
+            foreach ($rests as $rest) {
+                if (!in_array($rest->id,$rest_correction_ids)) {
+                    Rest::find($rest->id)->delete();
+                }
             }
         } elseif ($work->rests->isNotEmpty()) {
             $rests = Rest::where('work_id',$work->id)->get();

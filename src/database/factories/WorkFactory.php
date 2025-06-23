@@ -25,11 +25,7 @@ class WorkFactory extends Factory
 
 
         return [
-            // 'user_id' => User::factory(),
-            // 'date' => Carbon::now()->subDays(rand(0, 28))->toDateString(),
-            // 'start_time' => $this->faker->time('H:i:s'),
-            // 'work_time' => $this->faker->time('H:i:s'),
-            // 'status' => $this ->faker->numberBetween('1,3'),
+            
         ];
     }
 }

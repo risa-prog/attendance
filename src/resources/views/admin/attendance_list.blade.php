@@ -32,39 +32,39 @@
                 <th class="attendance-list__table-heading">詳細</th>
             </tr>
             @foreach($works as $work)
-            @php
-            $start = \Carbon\Carbon::parse($work->work_start);
-            $end = \Carbon\Carbon::parse($work->work_end);
-            $workingMinutes = $end->diffInMinutes($start);
+                @php
+                    $start = \Carbon\Carbon::parse($work->work_start);
+                    $end = \Carbon\Carbon::parse($work->work_end);
+                    $workingMinutes = $end->diffInMinutes($start);
 
-            $totalRestMinutes = $work->rests->sum(function ($rest) {
-            return \Carbon\Carbon::parse($rest->rest_start)->diffInMinutes($rest->rest_end);
-            });
-            $restHours = floor($totalRestMinutes / 60);
-            $restMinutes = $totalRestMinutes % 60;
+                    $totalRestMinutes = $work->rests->sum(function ($rest) {
+                    return \Carbon\Carbon::parse($rest->rest_start)->diffInMinutes($rest->rest_end);
+                    });
+                    $restHours = floor($totalRestMinutes / 60);
+                    $restMinutes = $totalRestMinutes % 60;
 
-            $actualWorkingMinutes = $workingMinutes - $totalRestMinutes;
+                    $actualWorkingMinutes = $workingMinutes - $totalRestMinutes;
 
-            $workHours = floor($actualWorkingMinutes / 60);
-            $workMinutes = $actualWorkingMinutes % 60;
-            @endphp
-            <tr>
-                <td class="attendance-list__table-data">{{$work->user->name}}</td>
-                <td class="attendance-list__table-data">{{substr($work->work_start,0,5)}}</td>
-                <td class="attendance-list__table-data">
-                    {{substr($work->work_end,0,5)}}
-                </td>
-                <td class="attendance-list__table-data">{{sprintf('%02d:%02d',$restHours,$restMinutes)}}</td>
-                @if($work->work_end !== null)
-                <td class="attendance-list__table-data">{{sprintf('%02d:%02d',$workHours,$workMinutes)}}</td>
-                @else
-                    <td class="attendance-list__table-data"></td>
-                @endif
+                    $workHours = floor($actualWorkingMinutes / 60);
+                    $workMinutes = $actualWorkingMinutes % 60;
+                @endphp
+                <tr>
+                    <td class="attendance-list__table-data">{{$work->user->name}}</td>
+                    <td class="attendance-list__table-data">{{substr($work->work_start,0,5)}}</td>
+                    <td class="attendance-list__table-data">
+                        {{substr($work->work_end,0,5)}}
+                    </td>
+                    <td class="attendance-list__table-data">{{sprintf('%02d:%02d',$restHours,$restMinutes)}}</td>
+                    @if($work->work_end !== null)
+                        <td class="attendance-list__table-data">{{sprintf('%02d:%02d',$workHours,$workMinutes)}}</td>
+                    @else
+                        <td class="attendance-list__table-data"></td>
+                    @endif
                     <td class="attendance-list__table-data">
                         <a class="attendance-list__table-link" href="/attendance/{{$work->id}}">詳細</a>
                     </td>
-                @endforeach
-            </tr>
+                </tr>
+            @endforeach
         </table>
     </div>
 </div>

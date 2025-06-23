@@ -11,18 +11,18 @@
     </div>
     <div class="login-form__content">
         <form action="/login" method="post" novalidate>
-            @csrf
+        @csrf
             <div class="login-form__group">
                 <label class="login-form__label" for="">メールアドレス</label>
                 <div class="login-form__item">
                     <input class="login-form__input" type="email" name="email" value="{{old('email')}}">
                 </div>
                 <div class="login-form__error">
-                    @error('email')
+                @error('email')
                     <p class="login-form__error-message">
                         {{$message}}
                     </p>
-                    @enderror
+                @enderror
                 </div>
             </div>
             <div class="login-form__group">
@@ -34,7 +34,7 @@
                     <p class="login-form__error-message">
                         {{$message}}
                     </p>
-                    @enderror
+                @enderror
                 </div>
             </div>
             <div class="login-form__button">

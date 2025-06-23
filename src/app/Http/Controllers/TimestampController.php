@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Work;
 use App\Models\Rest;
@@ -97,5 +96,4 @@ class TimestampController extends Controller
 
         return redirect('/attendance');
     }
-
 }

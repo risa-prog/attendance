@@ -11,16 +11,16 @@
     </div>
     <div class="register-form__content">
         <form action="/register" method="post" novalidate>
-            @csrf
+        @csrf
             <div class="register-form__group">
                 <label class="register-form__label" for="">名前</label>
                 <div class="register-form__item">
                     <input class="register-form__input" type="text" name="name" value="{{old('name')}}">
                 </div>
                 <div class="register-form__error">
-                    @error('name')
+                @error('name')
                     <p class="register-form__error-message">{{$message}}</p>
-                    @enderror
+                @enderror
                 </div>
 
             </div>
@@ -30,9 +30,9 @@
                     <input class="register-form__input"  type="email" name="email" value="{{old('email')}}">
                 </div>
                 <div class="register-form__error">
-                    @error('email')
+                @error('email')
                     <p class="register-form__error-message">{{$message}}</p>
-                    @enderror
+                @enderror
                 </div>
             </div>
             <div class="register-form__group">
@@ -41,9 +41,9 @@
                     <input class="register-form__input"  type="password" name="password">
                 </div>
                 <div class="register-form__error">
-                    @error('password')
+                @error('password')
                     <p class="register-form__error-message">{{$message}}</p>
-                    @enderror
+                @enderror
                 </div>
             </div>
             <div class="register-form__group">
@@ -52,9 +52,9 @@
                     <input class="register-form__input"  type="password" name="password_confirmation">
                 </div>
                 <div class="register-form__error">
-                    @error('password_confirmation')
+                @error('password_confirmation')
                     <p class="register-form__error-message">{{$message}}</p>
-                    @enderror
+                @enderror
                 </div>
             </div>
             <div class="register-form__button">

@@ -69,7 +69,7 @@
                                     {{ substr(optional($work)->work_start,0,5) }}
                                 </td>
                             @if($work !== null)
-                            <input type="hidden" name="work_start[]" value="{{ substr(optional($work)->work_start,0,5) }}">
+                                <input type="hidden" name="work_start[]" value="{{ substr(optional($work)->work_start,0,5) }}">
                             @endif
                                 <td class="staff__form-table-data">
                                     {{ substr(optional($work)->work_end,0,5) }}

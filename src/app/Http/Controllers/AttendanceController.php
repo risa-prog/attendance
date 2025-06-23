@@ -71,8 +71,6 @@ class AttendanceController extends Controller
     public function request (CorrectionRequest $request) {
         $user_id = Auth::id();
         $work_correction = $request->only(['work_id','work_start','work_end','status','note']);
-        // $work_correction['work_start'] =Carbon::parse($work_correction['work_start'])->format('H:i:s');
-        // $work_correction['work_end'] = Carbon::parse($work_correction['work_end'])->format('H:i:s');
         $work_correction = array_merge($work_correction,['user_id' => $user_id]);
         WorkCorrection::create($work_correction);
         

@@ -24,27 +24,27 @@
     <div class="timestamp__condition">
         @if($work === null)
             <form action="/timestamp/work_start" method="post">
-                @csrf
+            @csrf
                 <button class="timestamp__condition-working">出勤</button>
             </form>
         @elseif($work->status == '1')
             <div class="timestamp__condition-flex">
                 <form action="/timestamp/work_end" method="post">
-                    @csrf
+                @csrf
                     <button class="timestamp__condition-leaving">退勤</button>
                 </form>
                 <form action="/timestamp/rest_start" method="post">
-                    @csrf
+                @csrf
                     <button class="timestamp__condition-rest-start">休憩入</button>
                 </form>
             </div>
         @elseif($work->status == '2')
             <form action="/timestamp/rest_end" method="post">
-                @csrf
+            @csrf
                 <button class="timestamp__condition-rest-end">休憩戻</button>
             </form>
         @elseif($work->status == '3')
-        <p class="timestamp__good-job">お疲れ様でした。</p>
+            <p class="timestamp__good-job">お疲れ様でした。</p>
         @endif
     </div>
 </div>

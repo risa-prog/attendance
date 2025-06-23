@@ -9,7 +9,7 @@
     <h2 class="approval__ttl">勤怠詳細</h2>
     <div class="approval__content">
         <form class="approval__form" action="/stamp_correction_request/approve" method="post">
-            @csrf
+        @csrf
             <table class="approval__table">
                 <tr class="approval__table-row">
                     <th class="approval__table-heading">名前</th>
@@ -32,21 +32,17 @@
                     <input type="hidden" name="work_end" value="{{$work_correction->work_end}}">
                 </tr>
                 @foreach($rest_corrections as $rest_correction)
-                <tr class="approval__table-row">
-                    <th class="approval__table-heading">休憩</th>
-                    <td class="approval__table-data">
-                        {{substr($rest_correction->rest_start,0,5)}}
-                        <span class="approval__table-span">~</span>{{substr($rest_correction->rest_end,0,5)}}
-                    </td>
-                    <input type="hidden" name="rest_start[]" value="{{$rest_correction->rest_start}}">
-                    <input type="hidden" name="rest_end[]" value="{{$rest_correction->rest_end}}">
-                    <input type="hidden" name="rest_id[]" value="{{$rest_correction->rest_id}}">
-                </tr>
+                    <tr class="approval__table-row">
+                        <th class="approval__table-heading">休憩</th>
+                        <td class="approval__table-data">
+                            {{substr($rest_correction->rest_start,0,5)}}
+                            <span class="approval__table-span">~</span>{{substr($rest_correction->rest_end,0,5)}}
+                        </td>
+                        <input type="hidden" name="rest_start[]" value="{{$rest_correction->rest_start}}">
+                        <input type="hidden" name="rest_end[]" value="{{$rest_correction->rest_end}}">
+                        <input type="hidden" name="rest_id[]" value="{{$rest_correction->rest_id}}">
+                    </tr>
                 @endforeach
-                <!-- <tr class="approval__table-row">
-                    <th class="approval__table-heading">休憩2</th>
-                    <td class="approval__table-data"></td>
-                </tr> -->
                 <tr class="approval__table-row">
                     <th class="approval__table-heading">備考</th>
                     <td class="approval__table-data">{{$work_correction->note}}</td>
@@ -55,9 +51,9 @@
             <div class="approval__form-button">
                 <input type="hidden" name="work_id" value="{{$work_correction->work_id}}">
                 @if($work_correction->status === 1)
-                <button class="approval__form-submit">承認</button>
+                    <button class="approval__form-submit">承認</button>
                 @else
-                <span class="approval__form-status">承認済み</span>
+                    <span class="approval__form-status">承認済み</span>
                 @endif
             </div>
         </form>

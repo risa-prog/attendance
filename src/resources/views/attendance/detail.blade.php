@@ -127,14 +127,14 @@
                         <th class="attendance-detail__table-heading">備考</th>
                         @if(empty($work->workCorrection) || Auth::guard('admin')->check())
                         <!-- 修正していない、あるいは管理者の時 -->
-                            <td class="attendance-detail__table-data">
-                                <textarea class="attendance-detail__form-textarea" name="note">{{ old('note') }}</textarea>
-                                @error('note')
-                                    <div class="error">
-                                        <span class="error-message">{{$message}}</span>
-                                    </div>
-                                @enderror
-                            </td>
+                        <td class="attendance-detail__table-data">
+                            <textarea name="note" class="attendance-detail__form-textarea" id="note">{{old('note')}}</textarea>
+                            @error('note')
+                            <div class="error">
+                                <span class="error-message">{{$message}}</span>
+                            </div>
+                            @enderror
+                        </td>
                         @else
                         <td class="attendance-detail__table-data"> {{$work->workCorrection->note}}
                         </td>
@@ -146,7 +146,7 @@
                 @if(empty($work->workCorrection))
                 <button class="attendance-detail__form-submit">修正</button>
                 @elseif($work->workCorrection->status === 2)
-                <p>承認済みです</p>
+                <p class="attendance-detail__form-message">承認済みです</p>
                 @else
                 <p class="attendance-detail__form-message">*承認待ちのため修正はできません</p>
                 @endif
