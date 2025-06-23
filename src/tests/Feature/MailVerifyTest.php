@@ -8,6 +8,7 @@ use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use App\Models\User;
+use Illuminate\Support\Facades\Http;
 
 class MailVerifyTest extends TestCase
 {
@@ -27,9 +28,9 @@ class MailVerifyTest extends TestCase
         ]);
     }
     
-    // 応用 メール認証機能
+    // 応用16 メール認証機能
 
-    // 会員登録後、認証メールが送信される
+    // 16-1 会員登録後、認証メールが送信される
     public function test_confirm_verification_email_after_new_registration()
     {
         Notification::fake();
@@ -49,18 +50,18 @@ class MailVerifyTest extends TestCase
         Notification::assertSentTo($user, VerifyEmail::class);
     }
 
-    // 送られてきたメール認証リンクを押して認証を完了させると、メール認証完了画面に遷移(仕様が異なるため、テストの内容と順番が変わっています)
-    public function test_user_can_verify_email_and_shift_email_verification_complete_page() {
+    // 16-2 メール認証誘導画面で「認証はこちらから」ボタンを押すとメール認証サイトに遷移する
+    // public function test_user_can_verify_email_and_shift_email_verification_complete_page() {
+    //     $response = $this->post('/register', [
+    //         'name' => '山田太郎',
+    //         'email' => 'test@gmail.com',
+    //         'password' => 'password',
+    //         'password_confirmation' => 'password',
+    //     ]);
 
-    }
+    //     $response->assertRedirect('/email_verification');
 
-    // メール認証完了後、勤怠画面に遷移する
-    public function test_shift_attendance_page_after_email_verification() {
-        
-    }
-
-
-
-
-    // メール認証リンクは、新規登録後にmailhogにメールで送られてくるので、メール認証誘導画面の「認証はこちらから」ボタンからメール認証サイトに遷移することはできません。
+    //     $response  = Http::get('http://localhost:8025');
+    //     $response->assertStatus(200);
+    // }
 }

@@ -14,7 +14,8 @@
     <p class="email-verification__text">登録していただいたメールアドレスに認証メールを送付しました。<br>
         メール認証を完了してください。</p>
     <div class="email-verification__link">
-        <a class="email-verification__link-home" href="/email_verification/check">認証はこちらから</a>
+        <!-- <a class="email-verification__link-home" href="/email_verification/check">認証はこちらから</a> -->
+        <a class="email-verification__link-home" href="http://localhost:8025" target="_blank">認証はこちらから</a>
     </div>
     <form action="/email/verification-notification" method="post">
         @csrf

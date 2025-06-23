@@ -183,7 +183,7 @@ class CorrectRequestTest extends TestCase
 
         $work = Work::factory()->create([
             'user_id' => $user->id,
-            'date' => now()->subDays(3)->toDateString(),
+            'date' => now()->yesterday()->toDateString(),
             'work_start' => '9:00:00',
             'work_end' => '17:00:00',
             'status' => 3,
@@ -197,31 +197,33 @@ class CorrectRequestTest extends TestCase
         $response = $this->actingAs($user)->get("/attendance/{$work->id}");
         $response->assertStatus(200);
 
-        $response = $this->post('/attendance/correct_request', [
-            'work_id' => $work->id,
-            'work_start' => '09:00',
-            'work_end' => '17:00',
-            'rest_id' => $rest->id,
-            'rest_start' => ['12:00'],
-            'rest_end' => ['13:00'],
-            'note' => '打刻間違いのため',
-            'status' => 1,
-        ]);
+        $response = $this
+                ->post('/attendance/correct_request', [
+                'work_id' => $work->id,
+                'work_start' => '09:00',
+                'work_end' => '17:00',
+                'rest_id' => [$rest->id],
+                'rest_start' => ['12:00'],
+                'rest_end' => ['13:00'],
+                'note' => '打刻間違いのため',
+                'status' => 1,
+            ]);
 
+        $response->assertSessionHasNoErrors();
         $response->assertStatus(302);
 
         $this->assertDatabaseHas('work_corrections', [
             'work_id' => $work->id,
-            'work_start' => '09:00:00',
-            'work_end' => '17:00:00',
+            'work_start' => '09:00',
+            'work_end' => '17:00',
             'note' => '打刻間違いのため',
             'status' => 1,
         ]);
         $this->assertDatabaseHas('rest_corrections', [
             'work_id' => $work->id,
-            // 'rest_id' => $rest->id,
-            'rest_start' => '12:00:00',
-            'rest_end' => '13:00:00',
+            'rest_id' => $rest->id,
+            'rest_start' => '12:00',
+            'rest_end' => '13:00',
         ]);
     }
 

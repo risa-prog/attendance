@@ -35,31 +35,16 @@ Route::get('/register',
 Route::post('/register',[RegisterController::class,'register']);
 Route::post('/logout',[LogoutController::class,'logout']);
 
-// メールで認証をした時
+// メール認証
 Route::get('/email/verify/{id}/{hash}',[EmailVerificationController::class,'emailVerify'])->middleware(['auth:web', 'signed'])->name('verification.verify');
-Route::post('/email/verification-notification', [EmailVerificationController::class,'resend'])->middleware(['auth:web', 'throttle:6,1'])->name('verification.send');
+Route::post('/email/verification-notification',[EmailVerificationController::class,'resend'])->middleware(['auth:web', 'throttle:6,1'])->name('verification.send');
 // メール認証必須のルートにて、メール認証をしないでアクセスしようとした時のリダイレクト先
 Route::get('/email/verify', [EmailVerificationController::class,'emailVerificationRedirect'])->middleware('auth:web')->name('verification.notice');
-
-// // メールで認証をした時
-// Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-//     $request->fulfill(); // email_verified_at を更新
-//     return view('auth.email_verification_complete');
-//     // return redirect('/email_verification/complete'); // 認証後のリダイレクト先
-// })->middleware(['auth:web', 'signed'])->name('verification.verify');
-// Route::post('/email/verification-notification', function (Request $request) {
-//     $request->user()->sendEmailVerificationNotification();
-//     return back()->with('message', '認証リンクを再送しました。');
-// })->middleware(['auth:web', 'throttle:6,1'])->name('verification.send');
-// // メール認証必須のルートにて、メール認証をしないでアクセスしようとした時のリダイレクト先
-// Route::get('/email/verify', function () {
-//     return view('auth.email_verification');
-// })->middleware('auth:web')->name('verification.notice');
 
 // メール認証誘導画面へ
 Route::get('/email_verification',[EmailVerificationController::class,'index'])->name('email.verification');
 // メール認証誘導画面の認証ボタンを押した時
-Route::get('/email_verification/check', [EmailVerificationController::class, 'emailVerificationCheck']);
+// Route::get('/email_verification/check', [EmailVerificationController::class, 'emailVerificationCheck']);
 
 Route::prefix('admin')->group(function () {
     Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');

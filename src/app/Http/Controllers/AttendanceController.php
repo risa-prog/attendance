@@ -69,11 +69,10 @@ class AttendanceController extends Controller
 
     // 修正申請処理
     public function request (CorrectionRequest $request) {
-        // dd($request->all());
         $user_id = Auth::id();
         $work_correction = $request->only(['work_id','work_start','work_end','status','note']);
-        $work_correction['work_start'] =Carbon::parse($work_correction['work_start'])->format('H:i:s');
-        $work_correction['work_end'] = Carbon::parse($work_correction['work_end'])->format('H:i:s');
+        // $work_correction['work_start'] =Carbon::parse($work_correction['work_start'])->format('H:i:s');
+        // $work_correction['work_end'] = Carbon::parse($work_correction['work_end'])->format('H:i:s');
         $work_correction = array_merge($work_correction,['user_id' => $user_id]);
         WorkCorrection::create($work_correction);
         
@@ -90,9 +89,6 @@ class AttendanceController extends Controller
                 'rest_end' => $rest_end[$i],
                 'work_id' => $work_correction['work_id']
             ];
-            
-            // $rest['rest_start'] = Carbon::parse($rest['rest_start'])->format('H:i:s');
-            // $rest['rest_end'] = Carbon::parse($rest['rest_end'])->format('H:i:s');
             
             if ($rest['rest_start'] !== null && $rest['rest_end'] !== null) {
                     RestCorrection::create($rest);

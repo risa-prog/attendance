@@ -24,7 +24,7 @@ class CorrectionRequest extends FormRequest
     public function rules()
     {
         return [
-            'work_start' => 'required|date_format:H:i|before:work_end|',
+            'work_start' => 'required|date_format:H:i',
             'work_end' => 'required|date_format:H:i|after:work_start',
             'rest_start' => 'nullable|array',
             'rest_start.*' => 'nullable|date_format:H:i|after:work_start|before:work_end',

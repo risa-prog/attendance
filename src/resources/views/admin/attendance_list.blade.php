@@ -58,11 +58,11 @@
                 @if($work->work_end !== null)
                 <td class="attendance-list__table-data">{{sprintf('%02d:%02d',$workHours,$workMinutes)}}</td>
                 @else
-                <td class="attendance-list__table-data"></td>
+                    <td class="attendance-list__table-data"></td>
                 @endif
-                <td class="attendance-list__table-data">
-                    <a class="attendance-list__table-link" href="/attendance/{{$work->id}}">詳細</a>
-                </td>
+                    <td class="attendance-list__table-data">
+                        <a class="attendance-list__table-link" href="/attendance/{{$work->id}}">詳細</a>
+                    </td>
                 @endforeach
             </tr>
         </table>

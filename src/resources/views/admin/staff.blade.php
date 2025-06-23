@@ -94,7 +94,7 @@
                                 @if($work !== null)
                                     <a class="staff__form-table-link" href="/attendance/{{optional($work)->id}}">詳細</a>
                                 @else
-                                    <p class="staff__form-table-link">詳細</p>
+                                    <a class="staff__form-table-link" href="">詳細</a>
                                 @endif
                             </td>
                         </tr>
