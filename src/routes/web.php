@@ -40,11 +40,7 @@ Route::get('/email/verify/{id}/{hash}',[EmailVerificationController::class,'emai
 Route::post('/email/verification-notification',[EmailVerificationController::class,'resend'])->middleware(['auth:web', 'throttle:6,1'])->name('verification.send');
 // メール認証必須のルートにて、メール認証をしないでアクセスしようとした時のリダイレクト先
 Route::get('/email/verify', [EmailVerificationController::class,'emailVerificationRedirect'])->middleware('auth:web')->name('verification.notice');
-
-// メール認証誘導画面へ
 Route::get('/email_verification',[EmailVerificationController::class,'index'])->name('email.verification');
-// メール認証誘導画面の認証ボタンを押した時
-// Route::get('/email_verification/check', [EmailVerificationController::class, 'emailVerificationCheck']);
 
 Route::prefix('admin')->group(function () {
     Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');

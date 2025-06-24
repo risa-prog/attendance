@@ -50,27 +50,6 @@ class CorrectionRequest extends FormRequest
         ];
     }
 
-    // public function withValidator($validator){
-    //         $validator->after(
-    //         function ($validator) {
-    //             $starts = $this->rest_start ?? [];
-    //             $ends = $this->rest_end ?? [];
-
-    //             foreach ($starts as $i => $start) {
-    //                 $end = $ends[$i] ?? null;
-
-    //                 // どちらか片方だけ入力された場合
-    //                 if ($start && !$end) {
-    //                     $validator->errors()->add("rest_end.$i", '終了時間を入力してください');
-    //                 }
-
-    //                 if (!$start && $end) {
-    //                     $validator->errors()->add("rest_start.$i", '開始時間を入力してください');
-    //                 }
-    //             }
-    //         });
-    //     }
-
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
