@@ -64,7 +64,7 @@ php artisan key:generate --env=testing</br>
 php artisan config:clear</br>
 php artisan migrate --env=testing
 
-また、テスト実行時は `phpunit.xml` に以下の環境変数が設定されている必要があります：
+また、テスト実行時は `phpunit.xml` に以下の環境変数が設定されている必要があります
 
 ```xml
 <env name="APP_ENV" value="testing"/>
