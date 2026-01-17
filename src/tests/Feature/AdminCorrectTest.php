@@ -26,15 +26,11 @@ class AdminCorrectTest extends TestCase
     {
         parent::setUp();
 
-        // CSRF チェックのみ無効にする
         $this->withoutMiddleware([
             VerifyCsrfToken::class,
         ]);
     }
 
-    // 15 勤怠情報修正機能(管理者)
-
-    // 15-1 承認待ちの修正申請が全て表示される
     public function test_admin_can_view_all_waiting_for_approval_attendance()
     {
         $admin = Admin::factory()->create();
@@ -86,7 +82,6 @@ class AdminCorrectTest extends TestCase
         ]);
     }
 
-    // 15-2 承認済みの修正申請が全て表示される
     public function test_admin_can_view_all_approved_attendance() {
         $admin = Admin::factory()->create();
         $user1 = User::factory()->create();
@@ -137,7 +132,6 @@ class AdminCorrectTest extends TestCase
         ]);
     }
 
-    // 15-3 修正申請の詳細内容が正しく表示されている
     public function test_admin_can_view_actual_correct_request_information() {
         $admin = Admin::factory()->create();
         $user = User::factory()->create();
@@ -184,7 +178,6 @@ class AdminCorrectTest extends TestCase
         ]); 
     }
 
-    //15-4 修正申請の承認処理が正しく行われる
     public function test_confirm_approve_function() {
         $admin = Admin::factory()->create();
         $user = User::factory()->create();
@@ -236,6 +229,5 @@ class AdminCorrectTest extends TestCase
             'rest_start' => '13:00:00',
             'rest_end' => '14:00:00',
         ]);
-
-    } 
+    }
 }

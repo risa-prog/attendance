@@ -19,16 +19,11 @@ class AdminAuthenticationTest extends TestCase
     {
         parent::setUp();
 
-        // CSRF チェックのみ無効にする
         $this->withoutMiddleware([
             VerifyCsrfToken::class,
         ]);
     }
 
-
-    // 3 ログイン認証機能(管理者)
-
-    // 3-1 メールアドレス未入力の場合のバリデーション
     public function test_login_admin_validate_email()
     {
         $admin = Admin::factory()->create();
@@ -44,7 +39,6 @@ class AdminAuthenticationTest extends TestCase
         $this->assertEquals('メールアドレスを入力してください', $errors->first('email'));
     }
 
-    // 3-2 パスワードが未入力の場合のバリデーション
     public function test_login_admin_validate_password()
     {
         $admin = Admin::factory()->create();
@@ -60,7 +54,6 @@ class AdminAuthenticationTest extends TestCase
         $this->assertEquals('パスワードを入力してください', $errors->first('password'));
     }
 
-    // 3-3 登録内容と一致しない場合のバリデーション
     public function test_login_admin_validate_user()
     {
         $admin = Admin::factory()->create();

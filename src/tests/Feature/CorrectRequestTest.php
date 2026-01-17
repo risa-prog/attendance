@@ -26,15 +26,11 @@ class CorrectRequestTest extends TestCase
     {
         parent::setUp();
 
-        // CSRF チェックのみ無効にする
         $this->withoutMiddleware([
             VerifyCsrfToken::class,
         ]);
     }
 
-    // 11 勤怠詳細情報修正機能(一般ユーザー)
-
-    // 11-1 出勤時間が退勤時間より後になっている場合のバリデーション
     public function test_correct_request_form_validate_work_start_before()
     {
         $user = User::factory()->create();
@@ -70,7 +66,6 @@ class CorrectRequestTest extends TestCase
         $this->assertEquals('出勤時間もしくは退勤時間が不適切な値です', $errors->first('work_start'));
     }
 
-    // 11-2 休憩開始時間が退勤時間より後になっている時のバリデーション
     public function test_correct_request_form_validate_rest_start_before()
     {
         $user = User::factory()->create();
@@ -106,7 +101,6 @@ class CorrectRequestTest extends TestCase
         $this->assertEquals('休憩時間が勤務時間外です', $errors->first("rest_start.0"));
     }
 
-    // 11-3 休憩終了時間が退勤時間より後になっている時
     public function test_correct_request_form_validate_rest_end_before() {
         $user = User::factory()->create();
 
@@ -141,7 +135,6 @@ class CorrectRequestTest extends TestCase
         $this->assertEquals('休憩時間が勤務時間外です', $errors->first("rest_end.0"));
     }
 
-    // // 11-4 備考欄が未入力の場合
     public function test_correct_request_form_validate_note()
     {
         $user = User::factory()->create();
@@ -177,7 +170,6 @@ class CorrectRequestTest extends TestCase
         $this->assertEquals('備考を記入してください', $errors->first('note'));
     }
 
-    // 11-5 修正申請処理
     public function test_confirm_correct_request_function() {
         $user = User::factory()->create();
 
@@ -227,7 +219,6 @@ class CorrectRequestTest extends TestCase
         ]);
     }
 
-    // 11-6「承認待ち」にログインユーザーが行った申請が全て表示されていること
     public function test_user_can_view_all_waiting_for_approval_attendance() {
         $user = User::factory()->create();
 
@@ -271,7 +262,6 @@ class CorrectRequestTest extends TestCase
         ]);
     }
 
-    // 11-7「承認済み」に管理者が承認した修正申請が全て表示されていること
     public function test_user_can_view_all_approved_attendance() {
         $user = User::factory()->create();
 
@@ -326,7 +316,6 @@ class CorrectRequestTest extends TestCase
         ]);
     }
 
-    // 11-8 各申請の「詳細」を押すと申請詳細画面に遷移する
     public function test_shift_correct_request_detail() {
         $user = User::factory()->create();
 
@@ -364,7 +353,5 @@ class CorrectRequestTest extends TestCase
 
         $response = $this->get("/attendance/{$work->id}");
         $response->assertStatus(200);
-    
     }
-
 }

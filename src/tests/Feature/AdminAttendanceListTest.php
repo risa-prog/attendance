@@ -23,17 +23,13 @@ class AdminAttendanceListTest extends TestCase
     {
         parent::setUp();
 
-        // CSRF チェックのみ無効にする
         $this->withoutMiddleware([
             VerifyCsrfToken::class,
         ]);
     }
 
-    // 12 勤怠一覧情報取得機能(管理者)
-
     public function test_admin_can_view_all_users_attendance_information_correctly()
     {
-        // 12-1 その日になされた全ユーザーの勤怠情報を正確に確認できる
         $admin = Admin::factory()->create();
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
@@ -79,12 +75,10 @@ class AdminAttendanceListTest extends TestCase
         $response->assertSee('01:00');
         $response->assertSee('08:00');
 
-        //12-2 現在の日付が表示されている
         $date = Carbon::now()->format('Y/m/d');
         $response->assertSee($date);
-    }   
+    }
 
-    // 12-3 前日の勤怠情報
     public function test_admin_can_view_users_previous_day_attendance() {
         $admin = Admin::factory()->create();
         $user = User::factory()->create();
@@ -116,7 +110,6 @@ class AdminAttendanceListTest extends TestCase
         $response->assertSee('08:00');
     }
 
-    // 12-4 翌日の勤怠情報
     public function  test_admin_can_view_users_next_day_attendance() {
             $admin = Admin::factory()->create();
             $user = User::factory()->create();

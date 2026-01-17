@@ -22,15 +22,11 @@ class WorkStartTest extends TestCase
     {
         parent::setUp();
 
-        // CSRF チェックのみ無効にする
         $this->withoutMiddleware([
             VerifyCsrfToken::class,
         ]);
     }
 
-    //  6 出勤機能確認
-
-    // 6-1 出勤ボタンが正しく機能する
     public function test_confirm_the_work_start_function()
     {
         $user = User::factory()->create();
@@ -42,7 +38,6 @@ class WorkStartTest extends TestCase
         $response->assertSee('出勤中');
     }
 
-    // 6-2 出勤は一日一回のみできる
     public function test_confirm_the_work_start_function_only_once_a_day() {
         $user = User::factory()->create();
         $date = Carbon::now()->toDateString();
@@ -58,7 +53,6 @@ class WorkStartTest extends TestCase
         $response->assertDontSee('<button class="timestamp__condition-working">出勤</button>', false);
     }
 
-    // 6-3 出勤時刻が管理画面で確認できる
     public function test_admin_can_view_the_work_start_time() {
         $user = User::factory()->create();
         

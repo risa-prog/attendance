@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Carbon;
 use App\Models\User;
@@ -24,15 +23,11 @@ class AdminStaffTest extends TestCase
     {
         parent::setUp();
 
-        // CSRF チェックのみ無効にする
         $this->withoutMiddleware([
             VerifyCsrfToken::class,
         ]);
     }
 
-    // 14 ユーザー情報取得機能(管理者)
-
-    //14-1 管理者が全ユーザーの氏名とメールアドレスを確認できる
     public function test_admin_can_view_all_users_name_and_email() {
         $admin = Admin::factory()->create();
         $user1 = User::factory()->create();
@@ -48,7 +43,6 @@ class AdminStaffTest extends TestCase
         $response->assertSee($user2->email);
     }
 
-    // 14-2 ユーザーの勤怠情報が正しく表示される
     public function test_admin_can_view_actual_user_attendance() {
         $admin = Admin::factory()->create();
         $user = User::factory()->create();
@@ -80,7 +74,6 @@ class AdminStaffTest extends TestCase
         $response->assertSee('08:00');
     }
 
-    // 14-3 前月の情報が表示される
     public function test_show_previous_month_staff_attendance() {
         $admin = Admin::factory()->create();
         $user = User::factory()->create();
@@ -116,7 +109,6 @@ class AdminStaffTest extends TestCase
         $response->assertSee('08:00');
     }
 
-    // 14-4 翌月の情報が表示される
     public function test_show_next_month_staff_attendance() {
         $admin = Admin::factory()->create();
         $user = User::factory()->create();
@@ -151,7 +143,6 @@ class AdminStaffTest extends TestCase
         $response->assertSee('08:00');
     }
 
-    //14-5「詳細」を押すとその日の勤怠詳細画面に遷移
     public function test_show_the_day_attendance_detail() {
         $admin = Admin::factory()->create();
         $user = User::factory()->create();

@@ -34,7 +34,6 @@
                         </span>
                     </td>
                 </tr>
-                <!-- 修正申請していない、あるいは管理者の時 -->
                 @if(empty($work->workCorrection) || Auth::guard('admin')->check())
                 <tr class="attendance-detail__table-row">
                     <th class="attendance-detail__table-heading">出勤・退勤</th>
@@ -65,7 +64,6 @@
                 </tr>
                 @endif
 
-                <!-- 修正申請していない、あるいは管理者の時 -->
                 @if(empty($work->workCorrection) || Auth::guard('admin')->check())
                 @for($i = 0; $i < $rests->count(); $i++)
                     @php
@@ -111,7 +109,7 @@
                         </td>
                     </tr>
                     @else
-                    <!--修正申請済みの時 -->
+                    
                     @foreach($work->restCorrections as $restCorrection)
                     <tr class="attendance-detail__table-row">
                         <th class="attendance-detail__table-heading">休憩</th>

@@ -13,20 +13,10 @@ class EmailVerificationController extends Controller
         return view('auth.email_verification');
     }
 
-    // public function emailVerificationCheck() {
-    //     $user = Auth::user();
-    //     if($user->email_verified_at === null) {
-    //         return back()->with(
-    //             'message',
-    //             '送付したメールから認証を完了させてください。');
-    //     } else {
-    //         return redirect('/attendance');
-    //     }
-    // }
 
     public function emailVerify(EmailVerificationRequest $request) {
         $request->fulfill(); 
-        //  email_verified_atを更新
+        
         return redirect('/attendance');
     }
 

@@ -17,15 +17,8 @@ class WorkFactory extends Factory
      */
     public function definition()
     {
-        // ランダムな開始時刻（例: 9:00〜17:00 の間）
-        $start = Carbon::createFromTime(rand(7, 16), [0, 15, 30, 45][rand(0, 3)]);
-
-        // 開始時刻から最低1時間〜最大10時間後の終了時刻
-        $end = (clone $start)->addMinutes(rand(60, 600)); // 1〜10時間
-
-
         return [
-            
+            //
         ];
     }
 }

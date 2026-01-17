@@ -22,17 +22,13 @@ class AttendanceListTest extends TestCase
     {
         parent::setUp();
 
-        // CSRF チェックのみ無効にする
         $this->withoutMiddleware([
             VerifyCsrfToken::class,
         ]);
     }
-    
-    // 9 勤怠一覧情報取得機能(一般ユーザー)
 
     public function test_confirm_user_attendance_information()
     {
-        // 9-1 勤怠情報が全て表示されている
         $user = User::factory()->create();
 
         $work1 = Work::factory()->create([
@@ -79,13 +75,11 @@ class AttendanceListTest extends TestCase
         $response->assertSee('01:00');
         $response->assertSee('08:00');
 
-        // 9-2 現在の月が表示されている
         $date = Carbon::now();
         $date->translatedFormat('Y/m(D)');
         $response->assertSee($date);
     }
 
-    // 9-3「前月」を押した時に前月の情報が表示される
     public function test_confirm_user_attendance_information_previous_month() {
         $user = User::factory()->create();
         $this_month = Carbon::now()
@@ -118,7 +112,6 @@ class AttendanceListTest extends TestCase
         $response->assertSee('08:00');
     }
 
-    // 9-4 「翌月」を押した時に翌月の情報が表示される
     public function test_show_next_month_attendance()
     {
         $user = User::factory()->create();
@@ -152,7 +145,6 @@ class AttendanceListTest extends TestCase
         $response->assertSee('08:00');
     }
 
-    // 9-5「詳細」を押すと勤怠詳細画面に遷移
     public function test_show_attendance_detail() {
         $user = User::factory()->create();
         $work = Work::factory()->create([

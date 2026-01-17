@@ -35,10 +35,9 @@ Route::get('/register',
 Route::post('/register',[RegisterController::class,'register']);
 Route::post('/logout',[LogoutController::class,'logout']);
 
-// メール認証
 Route::get('/email/verify/{id}/{hash}',[EmailVerificationController::class,'emailVerify'])->middleware(['auth:web', 'signed'])->name('verification.verify');
 Route::post('/email/verification-notification',[EmailVerificationController::class,'resend'])->middleware(['auth:web', 'throttle:6,1'])->name('verification.send');
-// メール認証必須のルートにて、メール認証をしないでアクセスしようとした時のリダイレクト先
+
 Route::get('/email/verify', [EmailVerificationController::class,'emailVerificationRedirect'])->middleware('auth:web')->name('verification.notice');
 Route::get('/email_verification',[EmailVerificationController::class,'index'])->name('email.verification');
 
@@ -69,10 +68,7 @@ Route::middleware(['check.admin'])->group(function () {
     Route::get('/admin/attendance/staff/{id}', [AdminController::class, 'showStaffAttendance']);
     Route::get('/stamp_correction_request/approve/{attendance_correct_request}', [AdminController::class, 'showCorrectionRequestApproval'])->name('request.approval');
     Route::post('/stamp_correction_request/approve', [AdminController::class, 'approve']);
-    // Admin 修正機能
     Route::post('/stamp_correction', [AdminController::class, 'correct']);
-
-    // csv
     Route::post('/admin/attendance/staff/csv-download', [AdminController::class, 'downloadCsv']);
 });
 
@@ -80,4 +76,3 @@ Route::middleware(['auth.check'])->group(function() {
     Route::get('/attendance/{id}', [CommonController::class, 'showAttendanceDetail'])->name('attendance.detail');
     Route::get('/stamp_correction_request/list',[CommonController::class,'showCorrectionList']);
 });
-

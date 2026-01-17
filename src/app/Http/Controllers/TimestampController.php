@@ -28,21 +28,15 @@ class TimestampController extends Controller
     public function workEnd(){
         $user = Auth::user();
         $date = Carbon::now()->format('Y-m-d');
-        
         $work_end = Carbon::now()->format('H:i');
 
         $work = Work::where([
-             ['user_id','=',$user->id] ,
-             ['date','=',$date]
+            ['user_id','=',$user->id] ,
+            ['date','=',$date]
          ])->first();
 
-       $work->work_end = $work_end;
-       $work->save();
-
-    //    Work::where([
-    //         ['user_id','=',$user->id] ,
-    //         ['date','=',$date]
-    //      ])->update(['status' => '3']);
+        $work->work_end = $work_end;
+        $work->save();
 
         $work->update(['status' => 3]);
 
@@ -66,13 +60,7 @@ class TimestampController extends Controller
 
         $work->update(['status' => 2]);
 
-        // Work::where([
-        //      ['user_id','=',$user->id] ,
-        //      ['date','=',$date]
-        //  ])->update(['status' => '2']);
-
-       return redirect('/attendance');
-
+        return redirect('/attendance');
     }
 
     public function restEnd(){
@@ -94,11 +82,6 @@ class TimestampController extends Controller
         $rest->save();
 
         $work->update(['status' => 1]);
-
-        // Work::where([
-        //      ['user_id','=',$user->id] ,
-        //      ['date','=',$date]
-        //  ])->update(['status' => '1']);
 
         return redirect('/attendance');
     }

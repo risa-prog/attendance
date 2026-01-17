@@ -17,11 +17,11 @@ class AdminsTableSeeder extends Seeder
     public function run()
     {
         $pram=[
-              'name' => '山田次郎',
-              'email' =>'yamadaj@gmail.com',
-              'password' => Hash::make('jiro8888'),
-          ];
-          DB::table('admins')->insert($pram);
+            'name' => '山田次郎',
+            'email' =>'yamadaj@gmail.com',
+            'password' => Hash::make('jiro8888'),
+        ];
+        DB::table('admins')->insert($pram);
 
         $pram = [
             'name' => '山田三郎',

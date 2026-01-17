@@ -61,7 +61,6 @@
             document.getElementById('clock').innerText = `${hours}:${minutes}`;
         }
 
-        // ページ読み込み時に実行し、1分ごとに更新
         window.onload = function() {
             updateTime();
             setInterval(updateTime, 60000); // 1分ごとに更新

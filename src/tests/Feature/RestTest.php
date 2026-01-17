@@ -22,15 +22,11 @@ class RestTest extends TestCase
     {
         parent::setUp();
 
-        // CSRF チェックのみ無効にする
         $this->withoutMiddleware([
             VerifyCsrfToken::class,
         ]);
     }
 
-    // 7 休憩機能確認
-
-    // 7-1 休憩ボタンが正しく機能する
     public function test_confirm_rest_start_function()
     {
         $user = User::factory()->create();
@@ -50,7 +46,6 @@ class RestTest extends TestCase
         $response->assertSee('休憩中');
     }
 
-    // 7-2休憩は一日に何回でもできる
     public function test_confirm_rest_start_function_again_and_again() {
         $user = User::factory()->create();
         $date = Carbon::now()->toDateString();
@@ -70,7 +65,6 @@ class RestTest extends TestCase
         $response2->assertSee('<button class="timestamp__condition-rest-start">休憩入</button>', false);
     }
 
-    // 7-3 休憩戻ボタンが正しく機能する
     public function test_confirm_rest_end_function() {
         $user = User::factory()->create();
         $date = Carbon::now()->toDateString();
@@ -90,7 +84,6 @@ class RestTest extends TestCase
         $response2->assertSee('出勤中');
     }
 
-    // 7-4 休憩戻は一日に何回でもできる
     public function test_confirm_rest_end_function_again_and_again() {
         $user = User::factory()->create();
         $date = Carbon::now()->toDateString();
@@ -114,7 +107,6 @@ class RestTest extends TestCase
         $response3->assertSee('<button class="timestamp__condition-rest-end">休憩戻</button>',false);
     }
 
-    // 7-5 休憩時刻が勤怠一覧画面から確認できる
     public function test_user_can_view_rest_time_correctly() {
         $user = User::factory()->create();
         $date = Carbon::now()->toDateString();

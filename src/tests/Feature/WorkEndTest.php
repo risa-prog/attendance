@@ -22,15 +22,11 @@ class WorkEndTest extends TestCase
     {
         parent::setUp();
 
-        // CSRF チェックのみ無効にする
         $this->withoutMiddleware([
             VerifyCsrfToken::class,
         ]);
     }
 
-    // 退勤機能
-
-    // 8-1 退勤ボタンが正しく機能する
     public function test_confirm_work_end_function()
     {
         $user = User::factory()->create();
@@ -49,7 +45,6 @@ class WorkEndTest extends TestCase
         $response->assertSee('退勤済');
     }
 
-    // 8-2 退勤時刻が管理画面で確認できる
     public function test_admin_can_view_work_end_time() {
         $user = User::factory()->create();
     

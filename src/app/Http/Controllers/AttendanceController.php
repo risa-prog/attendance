@@ -67,7 +67,6 @@ class AttendanceController extends Controller
         }
     }
 
-    // 修正申請処理
     public function request (CorrectionRequest $request) {
         $user_id = Auth::id();
         $work_correction = $request->only(['work_id','work_start','work_end','status','note']);

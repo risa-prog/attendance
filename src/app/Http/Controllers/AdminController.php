@@ -121,15 +121,12 @@ class AdminController extends Controller
             $work->update($work_time);
         }
 
-        // 休憩において修正申請があった時
         if($work->restCorrections->isNotEmpty()) {
             $rest_time = $request->only('rest_id','rest_start','rest_end');
             $rest_id = $rest_time['rest_id'];
             $rest_start = $rest_time['rest_start'];
             $rest_end = $rest_time['rest_end'];
 
-            // forで一つずつrestの修正データを取り出す
-            // この時、rest_idがnullであるものも含んでいる
             for($i = 0; $i < count($rest_start); $i++){
                 $rest_correction = [
                     'id' => $rest_id[$i],
@@ -138,14 +135,12 @@ class AdminController extends Controller
                     'work_id' => $work->id,
                 ];
                 
-                // データベース内にあるrestのデータを取得し、idを配列に入れていく
                 $rests = Rest::where('work_id',$work->id)->get();
                 $rest_ids=array();
                 foreach($rests as $rest){
                     array_push($rest_ids,$rest->id);
                 }
         
-                // 修正しようとしているrestのデータがデータベース内にあるデータかどうかidを比較して判別する
                 if (in_array($rest_correction['id'],$rest_ids)) {
                     Rest::where('id',$rest_correction['id'])->update($rest_correction);
                 } elseif ($rest_correction['id'] === null && $rest_correction['rest_start'] !== null && $rest_correction['rest_end'] !== null) {

@@ -23,15 +23,11 @@ class AdminAttendanceDetailTest extends TestCase
     {
         parent::setUp();
 
-        // CSRF チェックのみ無効にする
         $this->withoutMiddleware([
             VerifyCsrfToken::class,
         ]);
     }
 
-    // 13　勤怠詳細情報取得・修正機能(管理者)
-
-    // 13-1 勤怠詳細画面に表示されるデータが選択したものになっている
     public function test_admin_can_view_selected_work_data()
     {
         $admin = Admin::factory()->create();
@@ -64,7 +60,6 @@ class AdminAttendanceDetailTest extends TestCase
         $response->assertSee(substr($rest->rest_end, 0, 5));
     }
 
-    // 13-2 出勤時間が退勤時間より後になっている場合のバリデーション
     public function test_correct_form_validate_work_start_before()
     {
         $user = User::factory()->create();
@@ -100,7 +95,6 @@ class AdminAttendanceDetailTest extends TestCase
         $this->assertEquals('出勤時間もしくは退勤時間が不適切な値です', $errors->first('work_start'));
     }
 
-    // 13-3 休憩開始時間が退勤時間より後になっている場合のバリデーション
     public function test_correct_form_validate_rest_start_before()
     {
         $user = User::factory()->create();
@@ -136,7 +130,6 @@ class AdminAttendanceDetailTest extends TestCase
         $this->assertEquals('休憩時間が勤務時間外です', $errors->first("rest_start.0"));
     }
 
-    // 13-4 休憩終了時間が退勤時間より後になっている場合のバリデーション
     public function test_correct_form_validate_rest_end_before()
     {
         $user = User::factory()->create();
@@ -172,7 +165,6 @@ class AdminAttendanceDetailTest extends TestCase
         $this->assertEquals('休憩時間が勤務時間外です', $errors->first("rest_end.0"));
     }
 
-    // 13-5 備考欄が未入力の場合のバリデーション
     public function test_correct_form_validate_note()
     {
         $user = User::factory()->create();
