@@ -224,7 +224,7 @@ class AdminController extends Controller
             Rest::find($rest->id)->delete();
             }
         }
-        return redirect()->route('attendance.detail',['id' => $work->id]);  
+        return redirect()->route('attendance.detail',['id' => $work->id])->withInput();  
     }
 
     public function downloadCsv (Request $request) {

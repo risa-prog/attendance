@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" href="{{asset('css/attendance/detail.css')}}">
+    <link rel="stylesheet" href="{{asset('css/attendance/detail.css')}}">
 @endsection
 
 @section('content')
@@ -10,14 +10,14 @@
     <div class="attendance-detail__content">
         @php
         if (Auth::guard('web')->check()) {
-        $actionUrl = url('/attendance/correct_request');
-        } elseif (Auth::guard('admin')->check()) {
-        $actionUrl = url('/stamp_correction');
-        }
+            $actionUrl = url('/attendance/correct_request');
+            } elseif (Auth::guard('admin')->check()) {
+            $actionUrl = url('/stamp_correction');
+            }
         @endphp
 
         <form class="attendance-detail__form" action="{{ $actionUrl }}" method="post">
-            @csrf
+        @csrf
             <input type="hidden" name="work_id" value="{{$work->id}}">
             <input type="hidden" name="status" value="1">
             <table class="attendance-detail__table">

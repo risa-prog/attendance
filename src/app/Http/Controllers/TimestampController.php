@@ -39,10 +39,12 @@ class TimestampController extends Controller
        $work->work_end = $work_end;
        $work->save();
 
-       Work::where([
-            ['user_id','=',$user->id] ,
-            ['date','=',$date]
-         ])->update(['status' => '3']);
+    //    Work::where([
+    //         ['user_id','=',$user->id] ,
+    //         ['date','=',$date]
+    //      ])->update(['status' => '3']);
+
+        $work->update(['status' => 3]);
 
        return redirect('/attendance');
     }
@@ -62,10 +64,12 @@ class TimestampController extends Controller
             'rest_start' => $rest_start,
         ]);
 
-        Work::where([
-             ['user_id','=',$user->id] ,
-             ['date','=',$date]
-         ])->update(['status' => '2']);
+        $work->update(['status' => 2]);
+
+        // Work::where([
+        //      ['user_id','=',$user->id] ,
+        //      ['date','=',$date]
+        //  ])->update(['status' => '2']);
 
        return redirect('/attendance');
 
@@ -89,10 +93,12 @@ class TimestampController extends Controller
         $rest->rest_end = $rest_end;
         $rest->save();
 
-        Work::where([
-             ['user_id','=',$user->id] ,
-             ['date','=',$date]
-         ])->update(['status' => '1']);
+        $work->update(['status' => 1]);
+
+        // Work::where([
+        //      ['user_id','=',$user->id] ,
+        //      ['date','=',$date]
+        //  ])->update(['status' => '1']);
 
         return redirect('/attendance');
     }

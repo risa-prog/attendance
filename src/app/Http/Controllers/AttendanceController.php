@@ -32,7 +32,7 @@ class AttendanceController extends Controller
         if ($request->tab === null) {
             $targetDate = Carbon::now();
             $monthStart = $targetDate->copy()->startOfMonth(); 
-            $monthEnd = $targetDate->copy()->endOfMonth();  
+            $monthEnd = $targetDate->copy()->endOfMonth();
             
             $dates = CarbonPeriod::create($monthStart, $monthEnd);
 
